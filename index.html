@@ -190,10 +190,14 @@ button { font-family: inherit; }
   display: flex;
   align-items: center;
   gap: 12px;
-  padding: 14px 12px 14px 16px;
-  border-radius: 16px;
-  background: rgba(8, 12, 28, .55);
-  border: 1px solid var(--line-soft);
+  padding: 15px 18px;
+  border-radius: 18px;
+  background: linear-gradient(180deg, rgba(255, 255, 255, .11), rgba(255, 255, 255, .04));
+  border: 1px solid rgba(255, 255, 255, .14);
+  box-shadow:
+    inset 0 1px 0 rgba(255, 255, 255, .22),
+    inset 0 -10px 18px -12px rgba(0, 0, 0, .35),
+    0 14px 22px -14px rgba(2, 4, 20, .75);
 }
 .field-text { flex: 1; min-width: 0; }
 .field-label { display: block; font-size: 13px; font-weight: 600; color: var(--muted); }
@@ -209,24 +213,7 @@ button { font-family: inherit; }
 }
 .field-value.bos { color: var(--faint); font-family: var(--ui); font-weight: 500; font-size: 17px; }
 
-.copy {
-  flex: none;
-  width: 46px; height: 46px;
-  display: grid; place-items: center;
-  border-radius: 13px;
-  color: var(--muted);
-  background: var(--surface-2);
-  border: 1px solid var(--line);
-  cursor: pointer;
-  transition: color .2s, border-color .2s, background .2s, transform .15s;
-}
-.copy svg { width: 20px; height: 20px; }
-.copy:hover { color: var(--text); border-color: #3A4780; }
-.copy:active { transform: scale(.93); }
-.copy:disabled { opacity: .35; cursor: default; pointer-events: none; }
-.copy.kopyalandi { color: var(--ok); border-color: rgba(61, 220, 151, .5); background: rgba(61, 220, 151, .1); }
 
-.ipucu { margin-top: 16px; text-align: center; font-size: 13px; color: var(--faint); }
 
 .durum-kutu { text-align: center; padding: 30px 12px 26px; }
 .durum-kutu .spinner { margin: 6px auto 16px; }
@@ -241,6 +228,85 @@ button { font-family: inherit; }
   border: 1px solid rgba(255, 122, 136, .3);
 }
 .durum-kutu .hata-ikon svg { width: 26px; height: 26px; }
+
+/* ============ CAM + 3D (PC bilgi ekranı) ============ */
+.sahne {
+  display: none;
+  position: fixed;
+  inset: -24px;
+  overflow: hidden;
+  pointer-events: none;
+  transform: translate3d(calc(var(--nx, 0) * -18px), calc(var(--ny, 0) * -18px), 0);
+  transition: transform .2s ease-out;
+}
+body.kullanici .sahne { display: block; }
+
+.kure { position: absolute; border-radius: 50%; }
+.k1 {
+  width: 220px; height: 220px; left: -10px; top: 8%;
+  background: radial-gradient(circle at 32% 28%, #D3D9FF 0%, #6B7BFF 30%, #2A2F9E 66%, #12153F 100%);
+  box-shadow: 0 46px 60px -24px rgba(20, 25, 110, .9), inset -18px -22px 40px rgba(6, 8, 40, .55);
+}
+.k2 {
+  width: 190px; height: 190px; right: -20px; bottom: 7%;
+  background: radial-gradient(circle at 30% 28%, #C2F4FF 0%, #3FB8FF 34%, #14589C 70%, #0A2148 100%);
+  box-shadow: 0 46px 60px -24px rgba(8, 60, 140, .9), inset -16px -20px 36px rgba(4, 16, 50, .55);
+}
+.k3 {
+  width: 96px; height: 96px; right: 16%; top: 4%;
+  background: radial-gradient(circle at 30% 28%, #F4D3FF 0%, #B26BFF 36%, #5A2AA8 72%, #23104F 100%);
+  box-shadow: 0 26px 36px -16px rgba(70, 30, 140, .9), inset -10px -12px 22px rgba(20, 8, 50, .5);
+}
+@media (prefers-reduced-motion: no-preference) {
+  .k1 { animation: yuz 9s ease-in-out infinite; }
+  .k2 { animation: yuz 11s ease-in-out -3s infinite; }
+  .k3 { animation: yuz 7s ease-in-out -5s infinite; }
+  @keyframes yuz { 50% { translate: 0 -16px; } }
+}
+
+.kart3d {
+  transform: perspective(1000px)
+             rotateX(calc(4deg + var(--ny, 0) * -8deg))
+             rotateY(calc(-5deg + var(--nx, 0) * 8deg));
+  transition: transform .18s ease-out;
+  will-change: transform;
+}
+
+.panel.cam {
+  position: relative;
+  background:
+    linear-gradient(135deg, rgba(255, 255, 255, .16), rgba(255, 255, 255, .04) 45%, rgba(255, 255, 255, .08)),
+    rgba(16, 22, 52, .38);
+  -webkit-backdrop-filter: blur(24px) saturate(170%);
+          backdrop-filter: blur(24px) saturate(170%);
+  border: 1px solid rgba(255, 255, 255, .22);
+  box-shadow:
+    inset 0 1px 0 rgba(255, 255, 255, .35),
+    inset 0 -1px 0 rgba(255, 255, 255, .06),
+    0 3px 0 rgba(140, 150, 255, .16),
+    0 7px 0 rgba(90, 100, 220, .10),
+    calc(var(--nx, 0) * -14px) calc(34px + var(--ny, 0) * -12px) 60px -18px rgba(2, 4, 22, .85);
+}
+/* Işık yansıması: parmağı / telefonu hareket ettirdikçe kayar */
+.panel.cam::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  z-index: 0;
+  border-radius: inherit;
+  pointer-events: none;
+  background: radial-gradient(420px circle at calc(50% + var(--nx, 0) * 45%) calc(28% + var(--ny, 0) * 35%), rgba(255, 255, 255, .17), transparent 60%);
+}
+.panel.cam > * { position: relative; z-index: 1; }
+
+.ticket .brand-icon {
+  box-shadow: 0 10px 22px -10px rgba(79, 95, 232, .9), inset 0 1px 0 rgba(255, 255, 255, .4), inset 0 -3px 6px rgba(0, 0, 50, .3);
+}
+.ticket .brand-text, .ticket .pc-sub, .ticket .field-label { color: #BAC4E4; }
+.ticket .pc-name, .ticket .field-value { text-shadow: 0 2px 12px rgba(2, 4, 24, .45); }
+.ticket .field-value { font-size: 22px; }
+.ticket .fields { border-top-color: rgba(255, 255, 255, .22); }
+.ticket .field-value.bos { color: #98A3C6; text-shadow: none; }
 
 /* ============ ADMIN ============ */
 .admin-kap { display: block; }
@@ -407,6 +473,7 @@ button { font-family: inherit; }
 </head>
 <body>
 
+<div class="sahne" aria-hidden="true"><i class="kure k1"></i><i class="kure k2"></i><i class="kure k3"></i></div>
 <div id="kok"></div>
 <div class="toast" id="toast" role="status" aria-live="polite"></div>
 
@@ -449,7 +516,8 @@ if (params.has("admin")) { adminEkrani(); } else { kullaniciEkrani(); }
 /* ================= KULLANICI ================= */
 function kullaniciEkrani() {
   const pcId = parseInt(params.get("pc"));
-  kok.innerHTML = '<div class="panel ticket"><div class="durum-kutu"><div class="spinner"></div><p>Yükleniyor</p></div></div>';
+  document.body.classList.add("kullanici");
+  kok.innerHTML = '<div class="kart3d"><div class="panel cam ticket"><div class="durum-kutu"><div class="spinner"></div><p>Yükleniyor</p></div></div></div>';
   const kart = kok.querySelector(".ticket");
 
   function hataGoster(baslik, aciklama) {
@@ -491,40 +559,37 @@ function kullaniciEkrani() {
               '<span class="field-label">' + a[0] + '</span>' +
               '<span class="field-value' + (a[1] ? '' : ' bos') + '">' + (a[1] ? esc(a[1]) : 'Girilmemiş') + '</span>' +
             '</div>' +
-            '<button class="copy" type="button" aria-label="' + a[0] + ' değerini kopyala"' + (a[1] ? '' : ' disabled') + '>' + ikon("copy") + '</button>' +
           '</div>'
         ).join("") +
-      '</div>' +
-      '<p class="ipucu">Kopyalamak için simgeye dokun.</p>';
+      '</div>';
 
-    kart.querySelectorAll(".copy").forEach((btn, i) => {
-      btn.onclick = () => kopyala(btn, alanlar[i][1]);
-    });
+    egimKur();
   }).catch(() => {
     hataGoster("Veri yüklenemedi", "İnternet bağlantısını kontrol edin.");
   });
 }
 
-function kopyala(btn, metin) {
-  const bitti = () => {
-    btn.classList.add("kopyalandi");
-    btn.innerHTML = ikon("check");
-    bildirim("Kopyalandı", "ok");
-    setTimeout(() => { btn.classList.remove("kopyalandi"); btn.innerHTML = ikon("copy"); }, 1600);
+let egimHazir = false;
+function egimKur() {
+  if (egimHazir) return;
+  egimHazir = true;
+  if (window.matchMedia && matchMedia("(prefers-reduced-motion: reduce)").matches) return;
+  const kok2 = document.documentElement;
+  const sinir = v => Math.max(-1, Math.min(1, v));
+  let gyro = false;
+  const ayarla = (x, y) => {
+    kok2.style.setProperty("--nx", sinir(x).toFixed(3));
+    kok2.style.setProperty("--ny", sinir(y).toFixed(3));
   };
-  const yedek = () => {
-    const ta = document.createElement("textarea");
-    ta.value = metin;
-    ta.style.position = "fixed";
-    ta.style.opacity = "0";
-    document.body.appendChild(ta);
-    ta.select();
-    try { document.execCommand("copy"); bitti(); } catch (e) { bildirim("Kopyalanamadı", "hata"); }
-    document.body.removeChild(ta);
-  };
-  if (navigator.clipboard && window.isSecureContext) {
-    navigator.clipboard.writeText(metin).then(bitti).catch(yedek);
-  } else { yedek(); }
+  window.addEventListener("deviceorientation", e => {
+    if (e.gamma == null || e.beta == null) return;
+    gyro = true;
+    ayarla(e.gamma / 25, (e.beta - 55) / 25);
+  }, { passive: true });
+  window.addEventListener("pointermove", e => {
+    if (gyro) return;
+    ayarla((e.clientX / window.innerWidth - .5) * 2, (e.clientY / window.innerHeight - .5) * 2);
+  }, { passive: true });
 }
 
 /* ================= ADMIN ================= */
