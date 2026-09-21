@@ -2,251 +2,413 @@
 <html lang="tr">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+<meta name="theme-color" content="#0B1020">
 <title>PC Bilgileri</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@500;600&family=Manrope:wght@500;600;700;800&display=swap" rel="stylesheet">
 <style>
+:root {
+  --bg: #0B1020;
+  --bg-deep: #080C19;
+  --surface: #141B34;
+  --surface-2: #1B2445;
+  --line: #2A3562;
+  --line-soft: #1F2850;
+  --text: #EAEEFB;
+  --muted: #8B96B8;
+  --faint: #6A7599;
+  --accent: #6B7BFF;
+  --accent-soft: #AEB8FF;
+  --ok: #3DDC97;
+  --warn: #FFB84D;
+  --err: #FF7A88;
+  --ui: "Manrope", system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
+  --mono: "JetBrains Mono", ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+}
+
 * { box-sizing: border-box; margin: 0; padding: 0; -webkit-tap-highlight-color: transparent; }
-html, body { height: 100%; overflow: hidden; }
+
+html { color-scheme: dark; }
+
 body {
-  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
-  background: #faf6ee;
-  color: #3a3226;
-  height: 100vh;
+  min-height: 100vh;
+  min-height: 100dvh;
+  font-family: var(--ui);
+  color: var(--text);
+  background:
+    radial-gradient(60rem 40rem at 8% -12%, rgba(107, 123, 255, .24), transparent 60%),
+    radial-gradient(50rem 36rem at 112% 112%, rgba(63, 184, 255, .15), transparent 55%),
+    var(--bg);
+  background-attachment: fixed;
   display: flex;
   align-items: center;
   justify-content: center;
-  padding: 14px;
+  padding: max(20px, env(safe-area-inset-top)) 16px max(20px, env(safe-area-inset-bottom));
+  -webkit-font-smoothing: antialiased;
 }
+
+/* İnce nokta ızgarası: ekranın ortasında görünür, kenarlarda söner */
+body::before {
+  content: "";
+  position: fixed;
+  inset: 0;
+  background-image: radial-gradient(rgba(255, 255, 255, .06) 1px, transparent 1px);
+  background-size: 22px 22px;
+  -webkit-mask-image: radial-gradient(ellipse at center, #000 25%, transparent 75%);
+          mask-image: radial-gradient(ellipse at center, #000 25%, transparent 75%);
+  pointer-events: none;
+}
+
+#kok { position: relative; width: 100%; max-width: 440px; }
+
+:focus-visible { outline: 2px solid var(--accent-soft); outline-offset: 3px; }
+button { font-family: inherit; }
+
+/* ============ ORTAK BİLEŞENLER ============ */
+.panel {
+  background: linear-gradient(180deg, rgba(27, 36, 69, .92), rgba(20, 27, 52, .94));
+  border: 1px solid var(--line);
+  border-radius: 28px;
+  padding: 24px;
+  box-shadow:
+    0 36px 70px -28px rgba(3, 6, 24, .85),
+    inset 0 1px 0 rgba(255, 255, 255, .05);
+}
+
+.btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  min-height: 52px;
+  padding: 0 22px;
+  border-radius: 16px;
+  border: 1px solid transparent;
+  font-size: 15px;
+  font-weight: 700;
+  letter-spacing: .01em;
+  cursor: pointer;
+  transition: transform .15s ease, filter .2s ease, background .2s ease, border-color .2s ease, color .2s ease;
+}
+.btn svg { width: 18px; height: 18px; flex: none; }
+.btn:active { transform: scale(.97); }
+.btn-block { width: 100%; }
+
+.btn-primary {
+  color: #fff;
+  background: linear-gradient(135deg, #4F5FE8, #3A6BE0);
+  box-shadow: 0 12px 26px -12px rgba(79, 95, 232, .9), inset 0 1px 0 rgba(255, 255, 255, .22);
+}
+.btn-primary:hover { filter: brightness(1.1); }
+
+.btn-ghost {
+  color: var(--text);
+  background: rgba(255, 255, 255, .04);
+  border-color: var(--line);
+}
+.btn-ghost:hover { background: rgba(255, 255, 255, .08); border-color: #3A4780; }
+
+.btn-text {
+  min-height: 44px;
+  padding: 0 14px;
+  font-size: 14px;
+  font-weight: 600;
+  color: var(--muted);
+  background: none;
+}
+.btn-text:hover { color: var(--text); }
+
+.gizli { display: none !important; }
+
+.spinner {
+  width: 28px; height: 28px;
+  border-radius: 50%;
+  border: 3px solid var(--line);
+  border-top-color: var(--accent);
+  animation: don .8s linear infinite;
+}
+@keyframes don { to { transform: rotate(360deg); } }
 
 /* ============ KULLANICI EKRANI ============ */
-.kart {
-  background: #ffffff;
-  border-radius: 18px;
-  padding: 20px;
-  max-width: 500px;
-  width: 100%;
-  max-height: 100vh;
-  overflow-y: auto;
-  box-shadow: 0 12px 40px rgba(120, 100, 60, 0.15);
-  border: 1px solid #e8dfc8;
+.ticket { padding: 22px 20px 20px; }
+@media (prefers-reduced-motion: no-preference) {
+  .ticket { animation: yuksel .5s cubic-bezier(.2, .7, .2, 1) both; }
+  @keyframes yuksel { from { opacity: 0; transform: translateY(14px); } }
 }
-.baslik {
-  font-size: 28px;
-  font-weight: 800;
-  color: #c47a1e;
-  margin-bottom: 18px;
-  text-align: center;
-  padding-bottom: 14px;
-  border-bottom: 2px solid #f0e6cc;
-}
-.satir {
-  background: #fdfaf2;
-  border-radius: 12px;
-  padding: 16px;
-  margin-bottom: 12px;
-  border-left: 5px solid #e8a63c;
-}
-.etiket {
-  font-size: 13px;
-  color: #a89a78;
-  text-transform: uppercase;
-  letter-spacing: 1.5px;
-  margin-bottom: 6px;
-  font-weight: 700;
-}
-.deger {
-  font-size: 26px;
-  color: #2d2519;
-  word-break: break-all;
-  font-weight: 700;
-  line-height: 1.2;
-}
-.hata { text-align: center; color: #c0392b; padding: 30px 20px; font-size: 18px; }
-.yukleniyor { text-align: center; padding: 40px; color: #a89a78; font-size: 16px; }
 
-/* ============ ADMIN EKRANI ============ */
-.admin-kap {
-  width: 100%;
-  max-width: 500px;
-  height: 100%;
-  max-height: 100vh;
+.ticket-head {
   display: flex;
-  flex-direction: column;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  margin-bottom: 26px;
 }
-.admin-baslik {
-  font-size: 22px;
-  font-weight: 800;
-  color: #c47a1e;
-  text-align: center;
-  padding: 10px 0 16px;
+.brand { display: flex; align-items: center; gap: 12px; min-width: 0; }
+.brand-icon {
+  width: 42px; height: 42px;
+  border-radius: 13px;
+  display: grid; place-items: center;
+  color: #fff;
+  background: linear-gradient(135deg, #4F5FE8, #3A6BE0);
+  box-shadow: 0 10px 22px -10px rgba(79, 95, 232, .9);
+  flex: none;
 }
-.giris-kutu {
-  background: #ffffff;
-  border-radius: 18px;
-  padding: 24px;
-  box-shadow: 0 12px 40px rgba(120, 100, 60, 0.15);
-  border: 1px solid #e8dfc8;
-}
-.giris-kutu h1 { color: #c47a1e; font-size: 22px; margin-bottom: 18px; text-align: center; }
-.giris-kutu input {
-  width: 100%;
-  padding: 14px;
-  border-radius: 10px;
-  border: 2px solid #e8dfc8;
-  background: #fdfaf2;
-  color: #2d2519;
-  font-size: 16px;
-  margin-bottom: 12px;
-  font-family: inherit;
-  text-align: center;
-}
-.giris-kutu input:focus { outline: none; border-color: #e8a63c; }
-.giris-kutu button {
-  width: 100%;
-  padding: 14px;
-  border-radius: 10px;
-  border: none;
-  background: #e8a63c;
-  color: #ffffff;
-  font-weight: 800;
-  font-size: 16px;
-  cursor: pointer;
-  box-shadow: 0 4px 0 #b8821f;
-  transition: all 0.1s;
-}
-.giris-kutu button:active { transform: translateY(3px); box-shadow: 0 1px 0 #b8821f; }
+.brand-icon svg { width: 22px; height: 22px; }
+.brand-text { font-size: 14px; font-weight: 600; color: var(--muted); }
 
-/* 9 KUTU GRID */
-.grid {
-  display: grid;
-  grid-template-columns: repeat(3, 1fr);
-  grid-template-rows: repeat(3, 1fr);
-  gap: 10px;
-  flex: 1;
-  min-height: 0;
-  padding: 4px;
+.pc-badge {
+  flex: none;
+  padding: 7px 14px;
+  border-radius: 999px;
+  font-size: 14px;
+  font-weight: 800;
+  color: var(--accent-soft);
+  background: rgba(107, 123, 255, .14);
+  border: 1px solid rgba(107, 123, 255, .35);
+  font-variant-numeric: tabular-nums;
 }
-.kutu {
-  background: #ffffff;
+
+.pc-name {
+  font-size: clamp(30px, 9vw, 40px);
+  font-weight: 800;
+  line-height: 1.05;
+  letter-spacing: -.025em;
+  word-break: break-word;
+}
+.pc-sub { margin-top: 8px; font-size: 15px; color: var(--muted); }
+
+.fields {
+  margin-top: 24px;
+  padding-top: 22px;
+  border-top: 1px dashed var(--line);
+  display: grid;
+  gap: 10px;
+}
+.field {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 14px 12px 14px 16px;
+  border-radius: 16px;
+  background: rgba(8, 12, 28, .55);
+  border: 1px solid var(--line-soft);
+}
+.field-text { flex: 1; min-width: 0; }
+.field-label { display: block; font-size: 13px; font-weight: 600; color: var(--muted); }
+.field-value {
+  display: block;
+  margin-top: 5px;
+  font-family: var(--mono);
+  font-size: 20px;
+  font-weight: 600;
+  line-height: 1.3;
+  color: var(--text);
+  word-break: break-all;
+}
+.field-value.bos { color: var(--faint); font-family: var(--ui); font-weight: 500; font-size: 17px; }
+
+.copy {
+  flex: none;
+  width: 46px; height: 46px;
+  display: grid; place-items: center;
+  border-radius: 13px;
+  color: var(--muted);
+  background: var(--surface-2);
+  border: 1px solid var(--line);
+  cursor: pointer;
+  transition: color .2s, border-color .2s, background .2s, transform .15s;
+}
+.copy svg { width: 20px; height: 20px; }
+.copy:hover { color: var(--text); border-color: #3A4780; }
+.copy:active { transform: scale(.93); }
+.copy:disabled { opacity: .35; cursor: default; pointer-events: none; }
+.copy.kopyalandi { color: var(--ok); border-color: rgba(61, 220, 151, .5); background: rgba(61, 220, 151, .1); }
+
+.ipucu { margin-top: 16px; text-align: center; font-size: 13px; color: var(--faint); }
+
+.durum-kutu { text-align: center; padding: 30px 12px 26px; }
+.durum-kutu .spinner { margin: 6px auto 16px; }
+.durum-kutu h2 { font-size: 20px; font-weight: 800; letter-spacing: -.01em; }
+.durum-kutu p { margin-top: 8px; font-size: 15px; line-height: 1.5; color: var(--muted); }
+.durum-kutu .hata-ikon {
+  width: 54px; height: 54px; margin: 0 auto 16px;
+  border-radius: 18px;
+  display: grid; place-items: center;
+  color: var(--err);
+  background: rgba(255, 122, 136, .12);
+  border: 1px solid rgba(255, 122, 136, .3);
+}
+.durum-kutu .hata-ikon svg { width: 26px; height: 26px; }
+
+/* ============ ADMIN ============ */
+.admin-kap { display: block; }
+
+.login { text-align: center; padding: 32px 24px 26px; }
+.login-ikon {
+  width: 62px; height: 62px;
+  margin: 0 auto 18px;
+  border-radius: 20px;
+  display: grid; place-items: center;
+  color: var(--accent-soft);
+  background: rgba(107, 123, 255, .14);
+  border: 1px solid rgba(107, 123, 255, .35);
+}
+.login-ikon svg { width: 28px; height: 28px; }
+.login h1 { font-size: 24px; font-weight: 800; letter-spacing: -.02em; }
+.login .alt { margin: 8px 0 22px; font-size: 15px; color: var(--muted); }
+.login .input { text-align: center; font-size: 18px; letter-spacing: .12em; }
+.login .btn { margin-top: 14px; }
+
+.input {
+  width: 100%;
+  min-height: 52px;
+  padding: 0 16px;
   border-radius: 14px;
+  border: 1px solid var(--line);
+  background: rgba(8, 12, 28, .6);
+  color: var(--text);
+  font-family: var(--ui);
+  font-size: 16px;
+  font-weight: 600;
+  transition: border-color .2s, box-shadow .2s;
+}
+.input.mono { font-family: var(--mono); font-weight: 500; }
+.input::placeholder { color: var(--faint); font-weight: 500; letter-spacing: 0; }
+.input:focus {
+  outline: none;
+  border-color: var(--accent);
+  box-shadow: 0 0 0 4px rgba(107, 123, 255, .2);
+}
+.input.sallan { animation: sallan .35s; border-color: var(--err); }
+@keyframes sallan {
+  20% { transform: translateX(-7px); } 40% { transform: translateX(6px); }
+  60% { transform: translateX(-4px); } 80% { transform: translateX(3px); }
+}
+.alan-hata { min-height: 20px; margin-top: 10px; font-size: 14px; font-weight: 600; color: var(--err); }
+
+.ana-baslik { padding: 4px 4px 18px; }
+.ana-baslik h1 { font-size: 30px; font-weight: 800; letter-spacing: -.025em; }
+.ana-baslik p { margin-top: 6px; font-size: 15px; color: var(--muted); }
+
+.grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px; }
+.kutu {
+  position: relative;
+  aspect-ratio: 1 / 1.05;
   display: flex;
   flex-direction: column;
   align-items: center;
   justify-content: center;
+  gap: 4px;
+  padding: 8px;
+  border-radius: 22px;
   cursor: pointer;
-  border: 2px solid #e8dfc8;
-  box-shadow: 0 4px 0 #dccfb0;
-  transition: all 0.1s;
-  user-select: none;
-  padding: 4px;
+  color: var(--text);
+  background: linear-gradient(180deg, rgba(27, 36, 69, .95), rgba(20, 27, 52, .95));
+  border: 1px solid var(--line);
+  box-shadow: 0 18px 32px -22px rgba(3, 6, 24, .9), inset 0 1px 0 rgba(255, 255, 255, .05);
+  transition: transform .15s ease, border-color .2s ease, box-shadow .2s ease;
 }
-.kutu:active { transform: translateY(3px); box-shadow: 0 1px 0 #dccfb0; }
-.kutu .kutu-num {
-  font-size: 28px;
-  font-weight: 800;
-  color: #c47a1e;
-}
-.kutu .kutu-pc {
-  font-size: 11px;
-  color: #a89a78;
-  font-weight: 700;
-  text-transform: uppercase;
-  letter-spacing: 0.5px;
-  margin-top: 2px;
-  text-align: center;
+.kutu:hover { border-color: rgba(107, 123, 255, .6); box-shadow: 0 18px 32px -20px rgba(79, 95, 232, .7), inset 0 1px 0 rgba(255, 255, 255, .06); }
+.kutu:active { transform: scale(.96); }
+.kutu-num { font-size: 36px; font-weight: 800; line-height: 1; letter-spacing: -.03em; font-variant-numeric: tabular-nums; }
+.kutu-pc {
+  max-width: 100%;
+  font-size: 12px;
+  font-weight: 600;
+  color: var(--muted);
   overflow: hidden;
   text-overflow: ellipsis;
   white-space: nowrap;
-  max-width: 100%;
 }
+.kutu-nokta {
+  position: absolute; top: 12px; right: 12px;
+  width: 8px; height: 8px;
+  border-radius: 50%;
+  background: var(--warn);
+  box-shadow: 0 0 0 3px rgba(255, 184, 77, .16);
+}
+.kutu-nokta.tam { background: var(--ok); box-shadow: 0 0 0 3px rgba(61, 220, 151, .16); }
 
-/* FORM EKRANI */
-.form-kap {
-  background: #ffffff;
-  border-radius: 18px;
-  padding: 20px;
-  width: 100%;
-  max-height: 100vh;
-  overflow-y: auto;
-  box-shadow: 0 12px 40px rgba(120, 100, 60, 0.15);
-  border: 1px solid #e8dfc8;
-}
-.form-baslik {
-  font-size: 20px;
-  font-weight: 800;
-  color: #c47a1e;
-  text-align: center;
-  margin-bottom: 16px;
-  padding-bottom: 12px;
-  border-bottom: 2px solid #f0e6cc;
-}
-.form-kap label {
-  font-size: 12px;
-  color: #a89a78;
-  text-transform: uppercase;
-  letter-spacing: 1px;
-  display: block;
-  margin-bottom: 5px;
-  margin-top: 10px;
-  font-weight: 700;
-}
-.form-kap input {
-  width: 100%;
-  padding: 12px;
-  border-radius: 10px;
-  border: 2px solid #e8dfc8;
-  background: #fdfaf2;
-  color: #2d2519;
-  font-size: 16px;
-  font-family: inherit;
-}
-.form-kap input:focus { outline: none; border-color: #e8a63c; }
-.btn-satir { display: flex; gap: 10px; margin-top: 18px; }
-.btn {
-  flex: 1;
+.aciklama { display: flex; justify-content: center; gap: 18px; margin-top: 16px; font-size: 13px; color: var(--muted); }
+.aciklama span { display: inline-flex; align-items: center; gap: 7px; }
+.aciklama i { width: 8px; height: 8px; border-radius: 50%; background: var(--warn); }
+.aciklama i.tam { background: var(--ok); }
+
+.alt-cubuk { display: flex; justify-content: center; margin-top: 8px; }
+
+/* Form */
+.form-panel { padding: 22px 20px 20px; }
+.form-ust { display: flex; align-items: center; gap: 14px; margin-bottom: 20px; }
+.form-ust .brand-icon { width: 46px; height: 46px; border-radius: 14px; }
+.form-ust h1 { font-size: 22px; font-weight: 800; letter-spacing: -.02em; }
+.form-ust p { margin-top: 2px; font-size: 14px; color: var(--muted); }
+
+.form-alan { margin-top: 14px; }
+.form-alan label { display: block; margin-bottom: 7px; font-size: 13px; font-weight: 600; color: var(--muted); }
+
+.token-kap {
   padding: 14px;
-  border-radius: 10px;
-  border: none;
-  font-weight: 800;
-  font-size: 15px;
-  cursor: pointer;
-  font-family: inherit;
+  margin-bottom: 4px;
+  border-radius: 16px;
+  background: rgba(107, 123, 255, .08);
+  border: 1px dashed rgba(107, 123, 255, .4);
 }
-.btn-kaydet { background: #2e8b57; color: #ffffff; box-shadow: 0 4px 0 #1f5f3a; }
-.btn-kaydet:active { transform: translateY(3px); box-shadow: 0 1px 0 #1f5f3a; }
-.btn-geri { background: #e8a63c; color: #ffffff; box-shadow: 0 4px 0 #b8821f; }
-.btn-geri:active { transform: translateY(3px); box-shadow: 0 1px 0 #b8821f; }
-.btn-ikincil { background: #a89a78; color: #ffffff; box-shadow: 0 4px 0 #7d7256; font-size: 12px; padding: 10px; }
-.btn-ikincil:active { transform: translateY(3px); box-shadow: 0 1px 0 #7d7256; }
+.token-kap .token-baslik { display: flex; align-items: center; gap: 8px; margin-bottom: 4px; font-size: 14px; font-weight: 700; color: var(--accent-soft); }
+.token-kap .token-baslik svg { width: 18px; height: 18px; }
+.token-kap .token-not { margin-bottom: 12px; font-size: 13px; line-height: 1.5; color: var(--muted); }
+.token-kap .input { margin-bottom: 10px; }
 
 .durum {
-  text-align: center;
-  padding: 10px;
-  border-radius: 8px;
-  margin-top: 12px;
-  font-size: 13px;
   display: none;
-  font-weight: 700;
+  margin-top: 16px;
+  padding: 12px 14px;
+  border-radius: 14px;
+  font-size: 14px;
+  font-weight: 600;
+  text-align: center;
+  line-height: 1.4;
 }
-.durum.ok { background: #d4edda; color: #155724; display: block; }
-.durum.hata { background: #f8d7da; color: #721c24; display: block; }
-.gizli { display: none !important; }
-.bilgi { font-size: 12px; color: #a89a78; margin-top: 8px; line-height: 1.5; text-align: center; }
+.durum.bekle { display: block; color: var(--accent-soft); background: rgba(107, 123, 255, .12); border: 1px solid rgba(107, 123, 255, .3); }
+.durum.ok { display: block; color: var(--ok); background: rgba(61, 220, 151, .1); border: 1px solid rgba(61, 220, 151, .3); }
+.durum.hata { display: block; color: var(--err); background: rgba(255, 122, 136, .1); border: 1px solid rgba(255, 122, 136, .3); }
 
-/* token alanı */
-.token-kap {
-  background: #fdfaf2;
-  border-radius: 10px;
-  padding: 12px;
-  margin-bottom: 12px;
-  border: 1px dashed #dccfb0;
+.btn-satir { display: grid; grid-template-columns: 1fr 1.5fr; gap: 10px; margin-top: 20px; }
+
+/* Bildirim */
+.toast {
+  position: fixed;
+  left: 50%;
+  bottom: max(24px, env(safe-area-inset-bottom));
+  transform: translate(-50%, 20px);
+  max-width: calc(100vw - 32px);
+  padding: 13px 18px;
+  border-radius: 14px;
+  font-size: 14px;
+  font-weight: 600;
+  color: var(--text);
+  background: var(--surface-2);
+  border: 1px solid var(--line);
+  box-shadow: 0 20px 40px -16px rgba(3, 6, 24, .9);
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity .25s ease, transform .25s ease;
+  z-index: 10;
 }
-.token-kap input { margin-bottom: 8px; }
+.toast.goster { opacity: 1; transform: translate(-50%, 0); }
+.toast.hata { border-color: rgba(255, 122, 136, .5); color: var(--err); }
+.toast.ok { border-color: rgba(61, 220, 151, .5); }
+
+@media (prefers-reduced-motion: reduce) {
+  * { animation: none !important; transition: none !important; }
+}
 </style>
 </head>
 <body>
 
-<div id="kok" style="width:100%; display:flex; justify-content:center;"></div>
+<div id="kok"></div>
+<div class="toast" id="toast" role="status" aria-live="polite"></div>
 
 <script>
 const ADMIN_SIFRE = "1234";
@@ -256,28 +418,113 @@ const TOKEN_KEY = "gh_token_pcsifre";
 const params = new URLSearchParams(window.location.search);
 const kok = document.getElementById("kok");
 
+/* ---------- Yardımcılar ---------- */
+const IKON = {
+  monitor: '<rect x="3" y="4" width="18" height="12" rx="2"/><path d="M8 20h8M12 16v4"/>',
+  lock:    '<rect x="4" y="10" width="16" height="11" rx="2.5"/><path d="M8 10V7a4 4 0 0 1 8 0v3"/>',
+  copy:    '<rect x="9" y="9" width="11" height="11" rx="2.5"/><path d="M5 15V6.5A2.5 2.5 0 0 1 7.5 4H16"/>',
+  check:   '<path d="M5 12.5l4.5 4.5L19 7.5"/>',
+  key:     '<circle cx="8" cy="15" r="4"/><path d="M11 12l9-9M16 7l3 3"/>',
+  save:    '<path d="M5 4h11l3 3v13H5z"/><path d="M8 4v5h7V4M8 20v-6h8v6"/>',
+  back:    '<path d="M15 5l-7 7 7 7"/>',
+  alert:   '<circle cx="12" cy="12" r="9"/><path d="M12 7.5v5.5M12 16.5v.01"/>'
+};
+function ikon(ad) {
+  return '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">' + IKON[ad] + '</svg>';
+}
+function esc(s) {
+  return String(s == null ? "" : s).replace(/[&<>"']/g, c => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" }[c]));
+}
+let toastZamani;
+function bildirim(mesaj, tip) {
+  const t = document.getElementById("toast");
+  t.textContent = mesaj;
+  t.className = "toast goster " + (tip || "");
+  clearTimeout(toastZamani);
+  toastZamani = setTimeout(() => { t.className = "toast"; }, 2600);
+}
+
 if (params.has("admin")) { adminEkrani(); } else { kullaniciEkrani(); }
 
 /* ================= KULLANICI ================= */
 function kullaniciEkrani() {
   const pcId = parseInt(params.get("pc"));
-  kok.innerHTML = '<div class="kart"><div class="yukleniyor">Yükleniyor...</div></div>';
-  const kart = kok.querySelector(".kart");
+  kok.innerHTML = '<div class="panel ticket"><div class="durum-kutu"><div class="spinner"></div><p>Yükleniyor</p></div></div>';
+  const kart = kok.querySelector(".ticket");
+
+  function hataGoster(baslik, aciklama) {
+    kart.innerHTML =
+      '<div class="durum-kutu">' +
+        '<div class="hata-ikon">' + ikon("alert") + '</div>' +
+        '<h2>' + baslik + '</h2>' +
+        '<p>' + aciklama + '</p>' +
+      '</div>';
+  }
+
   if (!pcId || pcId < 1 || pcId > 9) {
-    kart.innerHTML = '<div class="hata">❌ Geçersiz PC numarası.<br>QR kodu tekrar okutun.</div>';
+    hataGoster("Geçersiz PC numarası", "QR kodu tekrar okutun.");
     return;
   }
+
   fetch("data.json?v=" + Date.now()).then(r => r.json()).then(data => {
     const pc = data.pcs.find(p => p.id === pcId);
-    if (!pc) { kart.innerHTML = '<div class="hata">❌ PC bulunamadı.</div>'; return; }
-    kart.innerHTML = '<div class="baslik">💻 ' + (pc.pcAdi || "PC " + pc.id) + '</div>' +
-      '<div class="satir"><div class="etiket">Bilgisayar Adı</div><div class="deger">' + (pc.pcAdi || "-") + '</div></div>' +
-      '<div class="satir"><div class="etiket">Kullanıcı Adı</div><div class="deger">' + (pc.kullaniciAdi || "-") + '</div></div>' +
-      '<div class="satir"><div class="etiket">Şifre</div><div class="deger">' + (pc.sifre || "-") + '</div></div>' +
-      '<div class="satir"><div class="etiket">Bit Broker</div><div class="deger">' + (pc.bitBroker || "-") + '</div></div>';
+    if (!pc) { hataGoster("PC bulunamadı", "Bu numaraya ait kayıt yok."); return; }
+
+    const ad = pc.pcAdi || "PC " + pc.id;
+    const alanlar = [
+      ["Kullanıcı adı", pc.kullaniciAdi],
+      ["Şifre", pc.sifre],
+      ["Bit Broker", pc.bitBroker]
+    ];
+
+    kart.innerHTML =
+      '<div class="ticket-head">' +
+        '<div class="brand"><div class="brand-icon">' + ikon("monitor") + '</div><span class="brand-text">Erişim bilgileri</span></div>' +
+        '<div class="pc-badge">PC ' + esc(pc.id) + '</div>' +
+      '</div>' +
+      '<h1 class="pc-name">' + esc(ad) + '</h1>' +
+      '<p class="pc-sub">Bu bilgisayara giriş bilgileri</p>' +
+      '<div class="fields">' +
+        alanlar.map(a =>
+          '<div class="field">' +
+            '<div class="field-text">' +
+              '<span class="field-label">' + a[0] + '</span>' +
+              '<span class="field-value' + (a[1] ? '' : ' bos') + '">' + (a[1] ? esc(a[1]) : 'Girilmemiş') + '</span>' +
+            '</div>' +
+            '<button class="copy" type="button" aria-label="' + a[0] + ' değerini kopyala"' + (a[1] ? '' : ' disabled') + '>' + ikon("copy") + '</button>' +
+          '</div>'
+        ).join("") +
+      '</div>' +
+      '<p class="ipucu">Kopyalamak için simgeye dokun.</p>';
+
+    kart.querySelectorAll(".copy").forEach((btn, i) => {
+      btn.onclick = () => kopyala(btn, alanlar[i][1]);
+    });
   }).catch(() => {
-    kart.innerHTML = '<div class="hata">❌ Veri yüklenemedi.<br>İnternet bağlantısını kontrol edin.</div>';
+    hataGoster("Veri yüklenemedi", "İnternet bağlantısını kontrol edin.");
   });
+}
+
+function kopyala(btn, metin) {
+  const bitti = () => {
+    btn.classList.add("kopyalandi");
+    btn.innerHTML = ikon("check");
+    bildirim("Kopyalandı", "ok");
+    setTimeout(() => { btn.classList.remove("kopyalandi"); btn.innerHTML = ikon("copy"); }, 1600);
+  };
+  const yedek = () => {
+    const ta = document.createElement("textarea");
+    ta.value = metin;
+    ta.style.position = "fixed";
+    ta.style.opacity = "0";
+    document.body.appendChild(ta);
+    ta.select();
+    try { document.execCommand("copy"); bitti(); } catch (e) { bildirim("Kopyalanamadı", "hata"); }
+    document.body.removeChild(ta);
+  };
+  if (navigator.clipboard && window.isSecureContext) {
+    navigator.clipboard.writeText(metin).then(bitti).catch(yedek);
+  } else { yedek(); }
 }
 
 /* ================= ADMIN ================= */
@@ -285,47 +532,66 @@ let veri = null;
 let aktifPc = null;
 
 function adminEkrani() {
-  const tokenVar = !!localStorage.getItem(TOKEN_KEY);
   kok.innerHTML =
     '<div class="admin-kap">' +
-      '<div class="giris-kutu" id="girisKutu">' +
-        '<h1>🔒 Admin Girişi</h1>' +
-        '<input type="password" id="sifreGiris" placeholder="Şifre" inputmode="numeric" />' +
-        '<button onclick="girisYap()">Giriş Yap</button>' +
-      '</div>' +
-      '<div id="anaPanel" class="gizli" style="display:flex;flex-direction:column;height:100%;">' +
-        '<div class="admin-baslik">💻 PC Seç</div>' +
+      '<section class="panel login" id="girisKutu">' +
+        '<div class="login-ikon">' + ikon("lock") + '</div>' +
+        '<h1>Yönetici girişi</h1>' +
+        '<p class="alt">Devam etmek için şifreni gir.</p>' +
+        '<input class="input" type="password" id="sifreGiris" placeholder="Şifre" inputmode="numeric" autocomplete="off" />' +
+        '<div class="alan-hata" id="girisHata" role="alert"></div>' +
+        '<button class="btn btn-primary btn-block" type="button" onclick="girisYap()">Giriş yap</button>' +
+      '</section>' +
+      '<section id="anaPanel" class="gizli">' +
+        '<div class="ana-baslik"><h1>PC seç</h1><p>Düzenlemek istediğin bilgisayara dokun.</p></div>' +
         '<div class="grid" id="grid"></div>' +
-        '<button class="btn btn-ikincil" onclick="tokenSifirla()" style="margin-top:8px;">🔑 Token\'ı Sıfırla</button>' +
-      '</div>' +
-      '<div id="formPanel" class="gizli"></div>' +
+        '<div class="aciklama"><span><i class="tam"></i>Bilgiler tam</span><span><i></i>Eksik var</span></div>' +
+        '<div class="alt-cubuk"><button class="btn btn-text" type="button" onclick="tokenSifirla()">' + ikon("key") + 'Token\'ı sıfırla</button></div>' +
+      '</section>' +
+      '<section id="formPanel" class="gizli"></section>' +
     '</div>';
+
+  document.getElementById("sifreGiris").addEventListener("keydown", e => {
+    if (e.key === "Enter") girisYap();
+  });
 }
 
 function girisYap() {
-  const s = document.getElementById("sifreGiris").value;
-  if (s === ADMIN_SIFRE) {
+  const girdi = document.getElementById("sifreGiris");
+  const hata = document.getElementById("girisHata");
+  if (girdi.value === ADMIN_SIFRE) {
     document.getElementById("girisKutu").classList.add("gizli");
     document.getElementById("anaPanel").classList.remove("gizli");
     veriYukle();
-  } else { alert("Yanlış şifre!"); }
+  } else {
+    hata.textContent = "Şifre yanlış. Tekrar dene.";
+    girdi.classList.remove("sallan");
+    void girdi.offsetWidth;
+    girdi.classList.add("sallan");
+    girdi.select();
+  }
 }
 
 function veriYukle() {
   fetch("data.json?v=" + Date.now()).then(r => r.json()).then(d => {
     veri = d;
     gridCiz();
-  }).catch(() => alert("Veri yüklenemedi."));
+  }).catch(() => bildirim("Veri yüklenemedi. Bağlantını kontrol et.", "hata"));
 }
 
 function gridCiz() {
   const grid = document.getElementById("grid");
   grid.innerHTML = "";
   veri.pcs.forEach(pc => {
-    const k = document.createElement("div");
+    const tam = !!(pc.kullaniciAdi && pc.sifre && pc.bitBroker);
+    const k = document.createElement("button");
+    k.type = "button";
     k.className = "kutu";
-    k.innerHTML = '<div class="kutu-num">' + pc.id + '</div>' +
-                  '<div class="kutu-pc">' + (pc.pcAdi || "PC " + pc.id) + '</div>';
+    k.setAttribute("aria-label", (pc.pcAdi || "PC " + pc.id) + " düzenle");
+    k.innerHTML =
+      '<span class="kutu-nokta' + (tam ? ' tam' : '') + '"></span>' +
+      '<span class="kutu-num">' + esc(pc.id) + '</span>' +
+      '<span class="kutu-pc">' + esc(pc.pcAdi || "PC " + pc.id) + '</span>';
     k.onclick = () => formAc(pc.id);
     grid.appendChild(k);
   });
@@ -337,21 +603,24 @@ function formAc(id) {
   const fp = document.getElementById("formPanel");
   fp.classList.remove("gizli");
   fp.innerHTML =
-    '<div class="form-kap">' +
-      '<div class="form-baslik">💻 PC ' + aktifPc.id + '</div>' +
+    '<div class="panel form-panel">' +
+      '<div class="form-ust">' +
+        '<div class="brand-icon">' + ikon("monitor") + '</div>' +
+        '<div><h1>PC ' + esc(aktifPc.id) + '</h1><p>Bilgileri düzenle</p></div>' +
+      '</div>' +
       '<div class="token-kap" id="tokenKap"></div>' +
-      '<label>Bilgisayar Adı</label>' +
-      '<input id="f_pcAdi" value="' + (aktifPc.pcAdi || "") + '" />' +
-      '<label>Kullanıcı Adı</label>' +
-      '<input id="f_kullaniciAdi" value="' + (aktifPc.kullaniciAdi || "") + '" />' +
-      '<label>Şifre</label>' +
-      '<input id="f_sifre" value="' + (aktifPc.sifre || "") + '" />' +
-      '<label>Bit Broker</label>' +
-      '<input id="f_bitBroker" value="' + (aktifPc.bitBroker || "") + '" />' +
+      '<div class="form-alan"><label for="f_pcAdi">Bilgisayar adı</label>' +
+        '<input class="input" id="f_pcAdi" value="' + esc(aktifPc.pcAdi) + '" autocomplete="off" /></div>' +
+      '<div class="form-alan"><label for="f_kullaniciAdi">Kullanıcı adı</label>' +
+        '<input class="input mono" id="f_kullaniciAdi" value="' + esc(aktifPc.kullaniciAdi) + '" autocomplete="off" autocapitalize="off" /></div>' +
+      '<div class="form-alan"><label for="f_sifre">Şifre</label>' +
+        '<input class="input mono" id="f_sifre" value="' + esc(aktifPc.sifre) + '" autocomplete="off" autocapitalize="off" /></div>' +
+      '<div class="form-alan"><label for="f_bitBroker">Bit Broker</label>' +
+        '<input class="input mono" id="f_bitBroker" value="' + esc(aktifPc.bitBroker) + '" autocomplete="off" autocapitalize="off" /></div>' +
       '<div class="durum" id="durum"></div>' +
       '<div class="btn-satir">' +
-        '<button class="btn btn-geri" onclick="geriDon()">← Geri</button>' +
-        '<button class="btn btn-kaydet" onclick="kaydet()">💾 Kaydet</button>' +
+        '<button class="btn btn-ghost" type="button" onclick="geriDon()">' + ikon("back") + 'Geri</button>' +
+        '<button class="btn btn-primary" type="button" onclick="kaydet()">' + ikon("save") + 'Kaydet</button>' +
       '</div>' +
     '</div>';
   tokenKontrol();
@@ -370,25 +639,26 @@ function tokenKontrol() {
   if (localStorage.getItem(TOKEN_KEY)) { kap.classList.add("gizli"); return; }
   kap.classList.remove("gizli");
   kap.innerHTML =
-    '<div style="font-size:12px;color:#a89a78;font-weight:700;margin-bottom:6px;">GitHub Token (ilk seferde gerekli)</div>' +
-    '<input type="password" id="token" placeholder="github_pat_..." />' +
-    '<button class="btn btn-ikincil" style="width:100%;" onclick="tokenKaydet()">Token\'ı Kaydet</button>';
+    '<div class="token-baslik">' + ikon("key") + 'GitHub token gerekli</div>' +
+    '<p class="token-not">İlk kayıttan önce bir kez girmen yeterli. Bu cihazda saklanır.</p>' +
+    '<input class="input mono" type="password" id="token" placeholder="github_pat_..." autocomplete="off" />' +
+    '<button class="btn btn-ghost btn-block" type="button" onclick="tokenKaydet()">Token\'ı kaydet</button>';
 }
 function tokenKaydet() {
   const t = document.getElementById("token").value.trim();
-  if (!t) { alert("Token boş!"); return; }
+  if (!t) { bildirim("Token boş olamaz.", "hata"); return; }
   localStorage.setItem(TOKEN_KEY, t);
   document.getElementById("tokenKap").classList.add("gizli");
-  alert("Token kaydedildi.");
+  bildirim("Token kaydedildi.", "ok");
 }
 function tokenSifirla() {
   localStorage.removeItem(TOKEN_KEY);
-  alert("Token silindi. Bir sonraki kayıtta yeniden girmen gerekir.");
+  bildirim("Token silindi. Sonraki kayıtta yeniden girmen gerekir.");
 }
 
 function kaydet() {
   const token = localStorage.getItem(TOKEN_KEY);
-  if (!token) { alert("Önce GitHub token gir!"); return; }
+  if (!token) { bildirim("Önce GitHub token'ını gir.", "hata"); return; }
 
   aktifPc.pcAdi = document.getElementById("f_pcAdi").value;
   aktifPc.kullaniciAdi = document.getElementById("f_kullaniciAdi").value;
@@ -396,7 +666,7 @@ function kaydet() {
   aktifPc.bitBroker = document.getElementById("f_bitBroker").value;
 
   const url = "https://api.github.com/repos/" + REPO + "/contents/" + DOSYA;
-  durumGoster("⏳ Kaydediliyor...", "");
+  durumGoster("Kaydediliyor...", "bekle");
 
   fetch(url, { headers: { "Authorization": "token " + token } })
     .then(r => r.json()).then(mevcut => {
@@ -411,13 +681,13 @@ function kaydet() {
     .then(r => r.json())
     .then(sonuc => {
       if (sonuc.content) {
-        durumGoster("✅ Kaydedildi! 1-2 dk içinde herkes görür.", "ok");
+        durumGoster("Kaydedildi. 1-2 dk içinde herkes görür.", "ok");
         setTimeout(geriDon, 1500);
       } else {
-        durumGoster("❌ Hata: " + (sonuc.message || "Bilinmeyen"), "hata");
+        durumGoster("Kaydedilemedi: " + (sonuc.message || "Bilinmeyen hata"), "hata");
       }
     })
-    .catch(e => durumGoster("❌ Bağlantı hatası: " + e.message, "hata"));
+    .catch(e => durumGoster("Bağlantı hatası: " + e.message, "hata"));
 }
 
 function durumGoster(mesaj, tip) {
@@ -425,7 +695,7 @@ function durumGoster(mesaj, tip) {
   if (!d) return;
   d.textContent = mesaj;
   d.className = "durum " + tip;
-  if (tip !== "ok") setTimeout(() => { d.className = "durum"; }, 5000);
+  if (tip === "hata") setTimeout(() => { d.className = "durum"; }, 5000);
 }
 </script>
 </body>
