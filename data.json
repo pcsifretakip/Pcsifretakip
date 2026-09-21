@@ -2,7 +2,7 @@
   "pcs": [
     {
       "id": 1,
-      "pcAdi": "PC1",
+      "pcAdi": "pc1",
       "kullaniciAdi": "Aa658383",
       "sifre": "sakarya1234456789",
       "bitBroker": "111223344"
