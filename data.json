@@ -1,13 +1,67 @@
 {
   "pcs": [
-    { "id": 1, "pcAdi": "", "kullaniciAdi": "", "sifre": "", "bitBroker": "" },
-    { "id": 2, "pcAdi": "", "kullaniciAdi": "", "sifre": "", "bitBroker": "" },
-    { "id": 3, "pcAdi": "", "kullaniciAdi": "", "sifre": "", "bitBroker": "" },
-    { "id": 4, "pcAdi": "", "kullaniciAdi": "", "sifre": "", "bitBroker": "" },
-    { "id": 5, "pcAdi": "", "kullaniciAdi": "", "sifre": "", "bitBroker": "" },
-    { "id": 6, "pcAdi": "", "kullaniciAdi": "", "sifre": "", "bitBroker": "" },
-    { "id": 7, "pcAdi": "", "kullaniciAdi": "", "sifre": "", "bitBroker": "" },
-    { "id": 8, "pcAdi": "", "kullaniciAdi": "", "sifre": "", "bitBroker": "" },
-    { "id": 9, "pcAdi": "", "kullaniciAdi": "", "sifre": "", "bitBroker": "" }
+    {
+      "id": 1,
+      "pcAdi": "PC1",
+      "kullaniciAdi": "Aa658383",
+      "sifre": "sakarya1234456789",
+      "bitBroker": "111223344"
+    },
+    {
+      "id": 2,
+      "pcAdi": "",
+      "kullaniciAdi": "",
+      "sifre": "",
+      "bitBroker": ""
+    },
+    {
+      "id": 3,
+      "pcAdi": "",
+      "kullaniciAdi": "",
+      "sifre": "",
+      "bitBroker": ""
+    },
+    {
+      "id": 4,
+      "pcAdi": "",
+      "kullaniciAdi": "",
+      "sifre": "",
+      "bitBroker": ""
+    },
+    {
+      "id": 5,
+      "pcAdi": "",
+      "kullaniciAdi": "",
+      "sifre": "",
+      "bitBroker": ""
+    },
+    {
+      "id": 6,
+      "pcAdi": "",
+      "kullaniciAdi": "",
+      "sifre": "",
+      "bitBroker": ""
+    },
+    {
+      "id": 7,
+      "pcAdi": "",
+      "kullaniciAdi": "",
+      "sifre": "",
+      "bitBroker": ""
+    },
+    {
+      "id": 8,
+      "pcAdi": "",
+      "kullaniciAdi": "",
+      "sifre": "",
+      "bitBroker": ""
+    },
+    {
+      "id": 9,
+      "pcAdi": "",
+      "kullaniciAdi": "",
+      "sifre": "",
+      "bitBroker": ""
+    }
   ]
 }
