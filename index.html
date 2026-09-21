@@ -1,0 +1,152 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>PC Bilgileri</title>
+<style>
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body {
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+    background: #0f172a;
+    color: #e2e8f0;
+    min-height: 100vh;
+    padding: 20px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+  .kart {
+    background: #1e293b;
+    border-radius: 16px;
+    padding: 24px;
+    max-width: 480px;
+    width: 100%;
+    box-shadow: 0 20px 60px rgba(0,0,0,0.5);
+    border: 1px solid #334155;
+  }
+  .baslik {
+    font-size: 22px;
+    font-weight: 700;
+    color: #38bdf8;
+    margin-bottom: 20px;
+    text-align: center;
+    padding-bottom: 16px;
+    border-bottom: 2px solid #334155;
+  }
+  .satir {
+    background: #0f172a;
+    border-radius: 10px;
+    padding: 14px 16px;
+    margin-bottom: 12px;
+    border-left: 4px solid #38bdf8;
+  }
+  .etiket {
+    font-size: 11px;
+    color: #94a3b8;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    margin-bottom: 6px;
+    font-weight: 600;
+  }
+  .deger {
+    font-size: 17px;
+    color: #f1f5f9;
+    word-break: break-all;
+    font-weight: 500;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 10px;
+  }
+  .kopyala {
+    background: #334155;
+    color: #38bdf8;
+    border: none;
+    padding: 6px 12px;
+    border-radius: 6px;
+    font-size: 12px;
+    cursor: pointer;
+    font-weight: 600;
+    flex-shrink: 0;
+  }
+  .kopyala:active { background: #38bdf8; color: #0f172a; }
+  .hata {
+    text-align: center;
+    color: #f87171;
+    padding: 40px 20px;
+    font-size: 16px;
+  }
+  .yukleniyor { text-align: center; padding: 40px; color: #94a3b8; }
+</style>
+</head>
+<body>
+
+<div class="kart" id="kart">
+  <div class="yukleniyor">Yükleniyor...</div>
+</div>
+
+<script>
+  // URL'den ?pc=X parametresini al
+  const params = new URLSearchParams(window.location.search);
+  const pcId = parseInt(params.get("pc"));
+
+  const kart = document.getElementById("kart");
+
+  if (!pcId || pcId < 1 || pcId > 9) {
+    kart.innerHTML = '<div class="hata">❌ Geçersiz PC numarası.<br>QR kodu tekrar okutun.</div>';
+  } else {
+    // data.json'u çek
+    fetch("data.json?v=" + Date.now())
+      .then(r => r.json())
+      .then(data => {
+        const pc = data.pcs.find(p => p.id === pcId);
+        if (!pc) {
+          kart.innerHTML = '<div class="hata">❌ PC bulunamadı.</div>';
+          return;
+        }
+        goster(pc);
+      })
+      .catch(() => {
+        kart.innerHTML = '<div class="hata">❌ Veri yüklenemedi.<br>İnternet bağlantısını kontrol edin.</div>';
+      });
+  }
+
+  function goster(pc) {
+    kart.innerHTML = `
+      <div class="baslik">💻 ${pc.pcAdi || "PC " + pc.id}</div>
+      <div class="satir">
+        <div class="etiket">Bilgisayar Adı</div>
+        <div class="deger"><span>${pc.pcAdi || "-"}</span></div>
+      </div>
+      <div class="satir">
+        <div class="etiket">Kullanıcı Adı</div>
+        <div class="deger"><span>${pc.kullaniciAdi || "-"}</span>
+          <button class="kopyala" onclick="kopyala('${pc.kullaniciAdi}')">Kopyala</button>
+        </div>
+      </div>
+      <div class="satir">
+        <div class="etiket">Şifre</div>
+        <div class="deger"><span>${pc.sifre || "-"}</span>
+          <button class="kopyala" onclick="kopyala('${pc.sifre}')">Kopyala</button>
+        </div>
+      </div>
+      <div class="satir">
+        <div class="etiket">Bit Broker</div>
+        <div class="deger"><span>${pc.bitBroker || "-"}</span>
+          <button class="kopyala" onclick="kopyala('${pc.bitBroker}')">Kopyala</button>
+        </div>
+      </div>
+    `;
+  }
+
+  function kopyala(metin) {
+    if (!metin) return;
+    navigator.clipboard.writeText(metin).then(() => {
+      alert("Kopyalandı: " + metin);
+    });
+  }
+</script>
+
+</body>
+</html>
