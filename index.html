@@ -469,6 +469,46 @@ body.kullanici .sahne { display: block; }
 .form-alan { margin-top: 14px; }
 .form-alan label { display: block; margin-bottom: 7px; font-size: 13px; font-weight: 600; color: var(--muted); }
 
+.kul-blok { margin-top: 4px; }
+.kul-blok h2 { font-size: 14px; font-weight: 700; color: var(--muted); margin-bottom: 10px; }
+.kul-satir { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 6px; margin-bottom: 8px; }
+.kul-satir input {
+  min-height: 44px;
+  padding: 0 10px;
+  border-radius: 10px;
+  border: 1px solid var(--line);
+  background: rgba(8, 12, 28, .6);
+  color: var(--text);
+  font-family: var(--ui);
+  font-size: 13px;
+  font-weight: 600;
+}
+.kul-satir input::placeholder { color: var(--faint); font-weight: 500; }
+.kul-satir input:focus { outline: none; border-color: var(--accent); box-shadow: 0 0 0 3px rgba(245, 180, 0, .22); }
+.kul-basliklar { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 6px; margin-bottom: 6px; }
+.kul-basliklar span { font-size: 11px; font-weight: 700; color: var(--faint); text-transform: uppercase; letter-spacing: .04em; padding: 0 2px; }
+
+.kul-liste { margin-top: 24px; padding-top: 20px; border-top: 1px dashed var(--line); }
+.kul-liste h3 { font-size: 14px; font-weight: 700; color: var(--muted); margin-bottom: 12px; }
+.kul-liste table { width: 100%; border-collapse: collapse; border-radius: 14px; overflow: hidden; }
+.kul-liste th, .kul-liste td {
+  padding: 11px 12px;
+  font-size: 13px;
+  text-align: left;
+  border: 1px solid rgba(255, 255, 255, .16);
+}
+.kul-liste th {
+  background: rgba(255, 255, 255, .08);
+  color: var(--muted);
+  font-weight: 700;
+  text-transform: uppercase;
+  font-size: 11px;
+  letter-spacing: .04em;
+}
+.kul-liste td { color: var(--text); font-family: var(--mono); }
+.ticket .kul-liste { border-top-color: rgba(255, 255, 255, .2); }
+.ticket .kul-liste th, .ticket .kul-liste td { border-color: rgba(255, 255, 255, .22); }
+
 .token-kap {
   padding: 14px;
   margin-bottom: 4px;
@@ -603,6 +643,8 @@ function kullaniciEkrani() {
       ["Bit Broker", pc.bitBroker]
     ];
 
+    const kullanicilar = (pc.kullanicilar || []).filter(k => k.adi || k.soyadi || k.user);
+
     kart.innerHTML =
       '<div class="ticket-head">' +
         '<div class="brand"><div class="brand-icon">' + ikon("monitor") + '</div><span class="brand-text">Erişim bilgileri</span></div>' +
@@ -619,7 +661,18 @@ function kullaniciEkrani() {
             '</div>' +
           '</div>'
         ).join("") +
-      '</div>';
+      '</div>' +
+      (kullanicilar.length ?
+        '<div class="kul-liste">' +
+          '<h3>' + esc(pc.id) + ' nolu bilgisayarı kullanan kişiler</h3>' +
+          '<table>' +
+            '<tr><th>Adı</th><th>Soyadı</th><th>User</th></tr>' +
+            kullanicilar.map(k =>
+              '<tr><td>' + esc(k.adi || "—") + '</td><td>' + esc(k.soyadi || "—") + '</td><td>' + esc(k.user || "—") + '</td></tr>'
+            ).join("") +
+          '</table>' +
+        '</div>'
+      : "");
 
     egimKur();
   }).catch(() => {
@@ -739,6 +792,8 @@ function kutuTiltKur(el) {
 
 function formAc(id) {
   aktifPc = veri.pcs.find(p => p.id === id);
+  if (!Array.isArray(aktifPc.kullanicilar)) aktifPc.kullanicilar = [];
+  while (aktifPc.kullanicilar.length < 4) aktifPc.kullanicilar.push({ adi: "", soyadi: "", user: "" });
   document.getElementById("anaPanel").classList.add("gizli");
   const fp = document.getElementById("formPanel");
   fp.classList.remove("gizli");
@@ -749,6 +804,17 @@ function formAc(id) {
         '<div><h1>PC ' + esc(aktifPc.id) + '</h1><p>Bilgileri düzenle</p></div>' +
       '</div>' +
       '<div class="token-kap" id="tokenKap"></div>' +
+      '<div class="kul-blok">' +
+        '<h2>' + esc(aktifPc.id) + ' nolu bilgisayarı kullanacak kişiler</h2>' +
+        '<div class="kul-basliklar"><span>Adı</span><span>Soyadı</span><span>User</span></div>' +
+        (aktifPc.kullanicilar || []).map((k, i) =>
+          '<div class="kul-satir">' +
+            '<input id="k_adi_' + i + '" value="' + esc(k.adi) + '" placeholder="Adı" autocomplete="off" />' +
+            '<input id="k_soyadi_' + i + '" value="' + esc(k.soyadi) + '" placeholder="Soyadı" autocomplete="off" />' +
+            '<input id="k_user_' + i + '" class="mono" value="' + esc(k.user) + '" placeholder="User" autocomplete="off" autocapitalize="off" />' +
+          '</div>'
+        ).join("") +
+      '</div>' +
       '<div class="form-alan"><label for="f_adi">Adı</label>' +
         '<input class="input" id="f_adi" value="' + esc(aktifPc.adi) + '" autocomplete="off" /></div>' +
       '<div class="form-alan"><label for="f_soyadi">Soyadı</label>' +
@@ -804,6 +870,11 @@ function kaydet() {
   const token = localStorage.getItem(TOKEN_KEY);
   if (!token) { bildirim("Önce GitHub token'ını gir.", "hata"); return; }
 
+  aktifPc.kullanicilar = [0, 1, 2, 3].map(i => ({
+    adi: document.getElementById("k_adi_" + i).value,
+    soyadi: document.getElementById("k_soyadi_" + i).value,
+    user: document.getElementById("k_user_" + i).value
+  }));
   aktifPc.adi = document.getElementById("f_adi").value;
   aktifPc.soyadi = document.getElementById("f_soyadi").value;
   aktifPc.userNo = document.getElementById("f_userNo").value;

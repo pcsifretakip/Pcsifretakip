@@ -1,13 +1,58 @@
 {
   "pcs": [
-    { "id": 1, "adi": "", "soyadi": "", "userNo": "", "sifre": "", "bilgisayarAdi": "", "bitBroker": "" },
-    { "id": 2, "adi": "", "soyadi": "", "userNo": "", "sifre": "", "bilgisayarAdi": "", "bitBroker": "" },
-    { "id": 3, "adi": "", "soyadi": "", "userNo": "", "sifre": "", "bilgisayarAdi": "", "bitBroker": "" },
-    { "id": 4, "adi": "", "soyadi": "", "userNo": "", "sifre": "", "bilgisayarAdi": "", "bitBroker": "" },
-    { "id": 5, "adi": "", "soyadi": "", "userNo": "", "sifre": "", "bilgisayarAdi": "", "bitBroker": "" },
-    { "id": 6, "adi": "", "soyadi": "", "userNo": "", "sifre": "", "bilgisayarAdi": "", "bitBroker": "" },
-    { "id": 7, "adi": "", "soyadi": "", "userNo": "", "sifre": "", "bilgisayarAdi": "", "bitBroker": "" },
-    { "id": 8, "adi": "", "soyadi": "", "userNo": "", "sifre": "", "bilgisayarAdi": "", "bitBroker": "" },
-    { "id": 9, "adi": "", "soyadi": "", "userNo": "", "sifre": "", "bilgisayarAdi": "", "bitBroker": "" }
+    { "id": 1, "adi": "", "soyadi": "", "userNo": "", "sifre": "", "bilgisayarAdi": "", "bitBroker": "", "kullanicilar": [
+      { "adi": "", "soyadi": "", "user": "" },
+      { "adi": "", "soyadi": "", "user": "" },
+      { "adi": "", "soyadi": "", "user": "" },
+      { "adi": "", "soyadi": "", "user": "" }
+    ] },
+    { "id": 2, "adi": "", "soyadi": "", "userNo": "", "sifre": "", "bilgisayarAdi": "", "bitBroker": "", "kullanicilar": [
+      { "adi": "", "soyadi": "", "user": "" },
+      { "adi": "", "soyadi": "", "user": "" },
+      { "adi": "", "soyadi": "", "user": "" },
+      { "adi": "", "soyadi": "", "user": "" }
+    ] },
+    { "id": 3, "adi": "", "soyadi": "", "userNo": "", "sifre": "", "bilgisayarAdi": "", "bitBroker": "", "kullanicilar": [
+      { "adi": "", "soyadi": "", "user": "" },
+      { "adi": "", "soyadi": "", "user": "" },
+      { "adi": "", "soyadi": "", "user": "" },
+      { "adi": "", "soyadi": "", "user": "" }
+    ] },
+    { "id": 4, "adi": "", "soyadi": "", "userNo": "", "sifre": "", "bilgisayarAdi": "", "bitBroker": "", "kullanicilar": [
+      { "adi": "", "soyadi": "", "user": "" },
+      { "adi": "", "soyadi": "", "user": "" },
+      { "adi": "", "soyadi": "", "user": "" },
+      { "adi": "", "soyadi": "", "user": "" }
+    ] },
+    { "id": 5, "adi": "", "soyadi": "", "userNo": "", "sifre": "", "bilgisayarAdi": "", "bitBroker": "", "kullanicilar": [
+      { "adi": "", "soyadi": "", "user": "" },
+      { "adi": "", "soyadi": "", "user": "" },
+      { "adi": "", "soyadi": "", "user": "" },
+      { "adi": "", "soyadi": "", "user": "" }
+    ] },
+    { "id": 6, "adi": "", "soyadi": "", "userNo": "", "sifre": "", "bilgisayarAdi": "", "bitBroker": "", "kullanicilar": [
+      { "adi": "", "soyadi": "", "user": "" },
+      { "adi": "", "soyadi": "", "user": "" },
+      { "adi": "", "soyadi": "", "user": "" },
+      { "adi": "", "soyadi": "", "user": "" }
+    ] },
+    { "id": 7, "adi": "", "soyadi": "", "userNo": "", "sifre": "", "bilgisayarAdi": "", "bitBroker": "", "kullanicilar": [
+      { "adi": "", "soyadi": "", "user": "" },
+      { "adi": "", "soyadi": "", "user": "" },
+      { "adi": "", "soyadi": "", "user": "" },
+      { "adi": "", "soyadi": "", "user": "" }
+    ] },
+    { "id": 8, "adi": "", "soyadi": "", "userNo": "", "sifre": "", "bilgisayarAdi": "", "bitBroker": "", "kullanicilar": [
+      { "adi": "", "soyadi": "", "user": "" },
+      { "adi": "", "soyadi": "", "user": "" },
+      { "adi": "", "soyadi": "", "user": "" },
+      { "adi": "", "soyadi": "", "user": "" }
+    ] },
+    { "id": 9, "adi": "", "soyadi": "", "userNo": "", "sifre": "", "bilgisayarAdi": "", "bitBroker": "", "kullanicilar": [
+      { "adi": "", "soyadi": "", "user": "" },
+      { "adi": "", "soyadi": "", "user": "" },
+      { "adi": "", "soyadi": "", "user": "" },
+      { "adi": "", "soyadi": "", "user": "" }
+    ] }
   ]
 }
