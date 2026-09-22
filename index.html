@@ -175,38 +175,39 @@ button { font-family: inherit; }
 }
 
 .pc-name {
-  font-size: clamp(36px, 11vw, 48px);
+  font-size: clamp(26px, 8vw, 34px);
   font-weight: 800;
-  line-height: 1.05;
-  letter-spacing: -.025em;
+  line-height: 1.08;
+  letter-spacing: -.02em;
   word-break: break-word;
 }
-.pc-sub { margin-top: 8px; font-size: 17px; color: var(--muted); }
+.pc-sub { margin-top: 6px; font-size: 13px; color: var(--muted); }
 
 .fields {
-  margin-top: 24px;
-  padding-top: 22px;
+  margin-top: 18px;
+  padding-top: 16px;
   border-top: 1px dashed var(--line);
   display: grid;
-  gap: 10px;
+  gap: 8px;
 }
 .field {
   display: flex;
   align-items: center;
-  gap: 12px;
-  padding: 15px 18px;
-  border-radius: 14px;
+  gap: 10px;
+  padding: 11px 14px;
+  border-radius: 12px;
   background: rgba(8, 12, 28, .6);
   border: 1px solid var(--line);
   border-left: 3px solid rgba(255, 199, 44, .75);
+  min-width: 0;
 }
 .field-text { flex: 1; min-width: 0; }
-.field-label { display: block; font-size: 15px; font-weight: 600; color: var(--muted); }
+.field-label { display: block; font-size: 12px; font-weight: 600; color: var(--muted); }
 .field-value {
   display: block;
-  margin-top: 5px;
+  margin-top: 3px;
   font-family: var(--mono);
-  font-size: 20px;
+  font-size: 16px;
   font-weight: 600;
   line-height: 1.3;
   color: var(--text);
@@ -259,34 +260,14 @@ body.kullanici .sahne { display: none; }
   margin: 0 auto;
   overflow: hidden;
 }
-.kul-sabit { flex: none; padding: max(16px, env(safe-area-inset-top)) 16px 0; }
-.kul-sabit-panel { padding: 16px 16px 14px; }
-.kul-sabit-panel h3 { font-size: 13px; font-weight: 700; color: var(--muted); margin-bottom: 10px; }
-.kul-liste-scroll { max-height: 26vh; overflow-y: auto; border-radius: 14px; -webkit-overflow-scrolling: touch; }
-.kul-liste-scroll table { width: 100%; border-collapse: collapse; }
-.kul-liste-scroll th, .kul-liste-scroll td {
-  padding: 10px 12px;
-  font-size: 13px;
-  text-align: left;
-  border: 1px solid var(--line-soft);
-}
-.kul-liste-scroll th {
-  position: sticky; top: 0;
-  background: var(--surface-2);
-  color: var(--muted);
-  font-weight: 700;
-  text-transform: uppercase;
-  font-size: 11px;
-  letter-spacing: .04em;
-}
-.kul-liste-scroll td { color: var(--text); font-family: var(--mono); background: var(--surface); }
-
 .ticket-govde {
   flex: 1;
   min-height: 0;
+  min-width: 0;
   overflow-y: auto;
+  overflow-x: hidden;
   -webkit-overflow-scrolling: touch;
-  padding: 14px 16px max(16px, env(safe-area-inset-bottom));
+  padding: max(14px, env(safe-area-inset-top)) 16px max(16px, env(safe-area-inset-bottom));
 }
 .ticket-govde .ticket { min-height: min-content; }
 
@@ -534,14 +515,16 @@ body.kullanici .sahne { display: none; }
 .kul-basliklar { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1fr) minmax(0, 1fr); gap: 6px; margin-bottom: 6px; min-width: 0; }
 .kul-basliklar span { font-size: 11px; font-weight: 700; color: var(--faint); text-transform: uppercase; letter-spacing: .04em; padding: 0 2px; }
 
-.kul-liste { margin-top: 24px; padding-top: 20px; border-top: 1px dashed var(--line); }
-.kul-liste h3 { font-size: 14px; font-weight: 700; color: var(--muted); margin-bottom: 12px; }
-.kul-liste table { width: 100%; border-collapse: collapse; border-radius: 14px; overflow: hidden; }
+.kul-liste { margin-top: 18px; padding-top: 16px; border-top: 1px dashed var(--line); min-width: 0; }
+.kul-liste h3 { font-size: 12px; font-weight: 700; color: var(--muted); margin-bottom: 8px; }
+.kul-liste table { width: 100%; table-layout: fixed; border-collapse: collapse; border-radius: 12px; overflow: hidden; }
 .kul-liste th, .kul-liste td {
-  padding: 11px 12px;
-  font-size: 13px;
+  padding: 7px 6px;
+  font-size: 10.5px;
   text-align: left;
   border: 1px solid rgba(255, 255, 255, .16);
+  word-break: break-word;
+  overflow-wrap: anywhere;
 }
 .kul-liste th {
   background: rgba(255, 255, 255, .08);
@@ -661,11 +644,10 @@ function kullaniciEkrani() {
   document.body.classList.add("kullanici");
   kok.innerHTML =
     '<div class="ticket-sayfa">' +
-      '<div class="kul-sabit gizli" id="kulSabit"></div>' +
-      '<div class="ticket-govde"><div class="panel ticket" id="biletPanel"><div class="durum-kutu"><div class="spinner"></div><p>Yükleniyor</p></div></div></div>' +
+      '<div class="ticket-govde"><div class="panel ticket cam" id="biletPanel"><div class="durum-kutu"><div class="spinner"></div><p>Yükleniyor</p></div></div></div>' +
     '</div>';
   const kart = document.getElementById("biletPanel");
-  const kulSabit = document.getElementById("kulSabit");
+  egimKur();
 
   function hataGoster(baslik, aciklama) {
     kart.innerHTML =
@@ -703,6 +685,17 @@ function kullaniciEkrani() {
       '</div>' +
       '<h1 class="pc-name">' + esc(ad) + '</h1>' +
       '<p class="pc-sub">Bu bilgisayara giriş bilgileri</p>' +
+      (kullanicilar.length ?
+        '<div class="kul-liste">' +
+          '<h3>' + esc(pc.id) + ' nolu bilgisayarı kullanan kişiler</h3>' +
+          '<table>' +
+            '<tr><th>Adı</th><th>Soyadı</th><th>User</th></tr>' +
+            kullanicilar.map(k =>
+              '<tr><td>' + esc(k.adi || "—") + '</td><td>' + esc(k.soyadi || "—") + '</td><td>' + esc(k.user || "—") + '</td></tr>'
+            ).join("") +
+          '</table>' +
+        '</div>'
+      : "") +
       '<div class="fields">' +
         alanlar.map(a =>
           '<div class="field">' +
@@ -713,23 +706,6 @@ function kullaniciEkrani() {
           '</div>'
         ).join("") +
       '</div>';
-
-    if (kullanicilar.length) {
-      kulSabit.classList.remove("gizli");
-      kulSabit.innerHTML =
-        '<div class="panel kul-sabit-panel">' +
-          '<h3>' + esc(pc.id) + ' nolu bilgisayarı kullanan kişiler</h3>' +
-          '<div class="kul-liste-scroll"><table>' +
-            '<tr><th>Adı</th><th>Soyadı</th><th>User</th></tr>' +
-            kullanicilar.map(k =>
-              '<tr><td>' + esc(k.adi || "—") + '</td><td>' + esc(k.soyadi || "—") + '</td><td>' + esc(k.user || "—") + '</td></tr>'
-            ).join("") +
-          '</table></div>' +
-        '</div>';
-    } else {
-      kulSabit.classList.add("gizli");
-      kulSabit.innerHTML = "";
-    }
   }).catch(() => {
     hataGoster("Veri yüklenemedi", "İnternet bağlantısını kontrol edin.");
   });
@@ -763,9 +739,10 @@ let veri = null;
 let aktifPc = null;
 
 function adminEkrani() {
+  egimKur();
   kok.innerHTML =
     '<div class="admin-kap">' +
-      '<section class="panel login" id="girisKutu">' +
+      '<section class="panel login cam" id="girisKutu">' +
         '<div class="login-ikon">' + ikon("lock") + '</div>' +
         '<h1>Yönetici girişi</h1>' +
         '<p class="alt">Devam etmek için şifreni gir.</p>' +
@@ -774,9 +751,11 @@ function adminEkrani() {
         '<button class="btn btn-primary btn-block" type="button" onclick="girisYap()">Giriş yap</button>' +
       '</section>' +
       '<section id="anaPanel" class="gizli">' +
-        '<div class="ana-baslik"><h1>PC seç</h1><p>Düzenlemek istediğin bilgisayara dokun.</p></div>' +
-        '<div class="grid" id="grid"></div>' +
-        '<div class="aciklama"><span><i class="tam"></i>Bilgiler tam</span><span><i></i>Eksik var</span></div>' +
+        '<div class="panel cam">' +
+          '<div class="ana-baslik"><h1>PC seç</h1><p>Düzenlemek istediğin bilgisayara dokun.</p></div>' +
+          '<div class="grid" id="grid"></div>' +
+          '<div class="aciklama"><span><i class="tam"></i>Bilgiler tam</span><span><i></i>Eksik var</span></div>' +
+        '</div>' +
       '</section>' +
       '<section id="formPanel" class="gizli"></section>' +
     '</div>';
@@ -853,7 +832,7 @@ function formAc(id) {
   const fp = document.getElementById("formPanel");
   fp.classList.remove("gizli");
   fp.innerHTML =
-    '<div class="panel form-panel">' +
+    '<div class="panel form-panel cam">' +
       '<div class="form-ust">' +
         '<div class="brand-icon">' + ikon("monitor") + '</div>' +
         '<div><h1>PC ' + esc(aktifPc.id) + '</h1><p>Bilgileri düzenle</p></div>' +
