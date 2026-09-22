@@ -183,6 +183,38 @@ button { font-family: inherit; }
 }
 .pc-sub { margin-top: 6px; font-size: 13px; color: var(--muted); }
 
+.uyari-not {
+  margin-top: 12px;
+  display: inline-flex;
+  align-items: center;
+  gap: 9px;
+  padding: 9px 14px;
+  border-radius: 999px;
+  background: rgba(245, 180, 0, .1);
+  border: 1px solid rgba(245, 180, 0, .32);
+  font-size: 12.5px;
+  font-weight: 600;
+  letter-spacing: .01em;
+  color: #FFE8A3;
+  max-width: 100%;
+}
+.uyari-not span:last-child { overflow-wrap: anywhere; }
+.uyari-nokta {
+  width: 7px; height: 7px;
+  border-radius: 50%;
+  background: var(--accent);
+  flex: none;
+}
+@media (prefers-reduced-motion: no-preference) {
+  .uyari-not { opacity: 0; animation: uyariGir .55s cubic-bezier(.2, .7, .2, 1) .25s both; }
+  .uyari-nokta { animation: uyariNabiz 2.4s ease-in-out .8s infinite; }
+  @keyframes uyariGir { from { opacity: 0; transform: translateY(6px); } to { opacity: 1; transform: translateY(0); } }
+  @keyframes uyariNabiz {
+    0%, 100% { box-shadow: 0 0 0 0 rgba(245, 180, 0, .5); }
+    50% { box-shadow: 0 0 0 5px rgba(245, 180, 0, 0); }
+  }
+}
+
 .fields {
   margin-top: 18px;
   padding-top: 16px;
@@ -264,12 +296,14 @@ body.kullanici .sahne { display: none; }
   flex: 1;
   min-height: 0;
   min-width: 0;
-  overflow-y: auto;
-  overflow-x: hidden;
-  -webkit-overflow-scrolling: touch;
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
   padding: max(14px, env(safe-area-inset-top)) 16px max(16px, env(safe-area-inset-bottom));
 }
-.ticket-govde .ticket { min-height: min-content; }
+.ticket-govde .ticket { min-height: 0; width: 100%; overflow: hidden; display: flex; flex-direction: column; }
+.ticket-fit { min-width: 0; width: 100%; transform-origin: top left; }
 
 .kure { position: absolute; border-radius: 50%; }
 .k1 {
@@ -679,12 +713,14 @@ function kullaniciEkrani() {
     const kullanicilar = (pc.kullanicilar || []).filter(k => k.adi || k.soyadi || k.user);
 
     kart.innerHTML =
+      '<div class="ticket-fit">' +
       '<div class="ticket-head">' +
         '<div class="brand"><div class="brand-icon">' + ikon("monitor") + '</div><span class="brand-text">Erişim bilgileri</span></div>' +
         '<div class="pc-badge">PC ' + esc(pc.id) + '</div>' +
       '</div>' +
       '<h1 class="pc-name">' + esc(ad) + '</h1>' +
       '<p class="pc-sub">Bu bilgisayara giriş bilgileri</p>' +
+      '<div class="uyari-not"><span class="uyari-nokta"></span><span>Şifre değiştirdiğinizde mutlaka ofise haber veriniz.</span></div>' +
       (kullanicilar.length ?
         '<div class="kul-liste">' +
           '<h3>' + esc(pc.id) + ' nolu bilgisayarı kullanan kişiler</h3>' +
@@ -705,11 +741,38 @@ function kullaniciEkrani() {
             '</div>' +
           '</div>'
         ).join("") +
+      '</div>' +
       '</div>';
+    sigdirOlcekle(kart);
   }).catch(() => {
     hataGoster("Veri yüklenemedi", "İnternet bağlantısını kontrol edin.");
   });
 }
+
+/* Bilet içeriğini, kaydırmaya gerek kalmadan panele sığacak şekilde ölçekler */
+function sigdirOlcekle(kart) {
+  const icerik = kart.querySelector(".ticket-fit");
+  if (!icerik) return;
+  icerik.style.width = "";
+  icerik.style.transform = "";
+  const stil = getComputedStyle(kart);
+  const dolgu = parseFloat(stil.paddingTop) + parseFloat(stil.paddingBottom);
+  const mevcut = kart.clientHeight - dolgu;
+  let gerekli = icerik.scrollHeight;
+  if (mevcut <= 0 || gerekli <= mevcut) return;
+  let olcek = Math.max(mevcut / gerekli, .5);
+  for (let i = 0; i < 4; i++) {
+    icerik.style.width = (100 / olcek) + "%";
+    icerik.style.transform = "scale(" + olcek + ")";
+    const yukseklik = icerik.getBoundingClientRect().height;
+    if (yukseklik <= mevcut + .5) break;
+    olcek = Math.max(olcek * (mevcut / yukseklik), .5);
+  }
+}
+window.addEventListener("resize", () => {
+  const kart = document.getElementById("biletPanel");
+  if (kart && kart.querySelector(".ticket-fit")) sigdirOlcekle(kart);
+});
 
 var egimHazir = false;
 function egimKur() {
