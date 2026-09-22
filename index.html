@@ -157,13 +157,13 @@ button { font-family: inherit; }
   flex: none;
 }
 .brand-icon svg { width: 22px; height: 22px; }
-.brand-text { font-size: 14px; font-weight: 600; color: var(--muted); }
+.brand-text { font-size: 15px; font-weight: 600; color: var(--muted); }
 
 .pc-badge {
   flex: none;
-  padding: 7px 14px;
+  padding: 8px 16px;
   border-radius: 999px;
-  font-size: 14px;
+  font-size: 16px;
   font-weight: 800;
   color: var(--bg-deep);
   background: var(--accent);
@@ -172,13 +172,13 @@ button { font-family: inherit; }
 }
 
 .pc-name {
-  font-size: clamp(30px, 9vw, 40px);
+  font-size: clamp(36px, 11vw, 48px);
   font-weight: 800;
   line-height: 1.05;
   letter-spacing: -.025em;
   word-break: break-word;
 }
-.pc-sub { margin-top: 8px; font-size: 15px; color: var(--muted); }
+.pc-sub { margin-top: 8px; font-size: 17px; color: var(--muted); }
 
 .fields {
   margin-top: 24px;
@@ -202,7 +202,7 @@ button { font-family: inherit; }
     0 14px 22px -14px rgba(2, 4, 20, .75);
 }
 .field-text { flex: 1; min-width: 0; }
-.field-label { display: block; font-size: 13px; font-weight: 600; color: var(--muted); }
+.field-label { display: block; font-size: 15px; font-weight: 600; color: var(--muted); }
 .field-value {
   display: block;
   margin-top: 5px;
@@ -267,10 +267,6 @@ body.kullanici .sahne { display: block; }
 }
 
 .kart3d {
-  transform: perspective(1000px)
-             rotateX(calc(4deg + var(--ny, 0) * -8deg))
-             rotateY(calc(-5deg + var(--nx, 0) * 8deg));
-  transition: transform .18s ease-out;
   will-change: transform;
 }
 
@@ -309,7 +305,7 @@ body.kullanici .sahne { display: block; }
 .ticket .brand-text, .ticket .pc-sub, .ticket .field-label { color: #C7D2F0; }
 .ticket .pc-name, .ticket .field-value { text-shadow: 0 2px 12px rgba(2, 4, 24, .5); }
 .ticket .pc-name { color: #FFE8A3; }
-.ticket .field-value { font-size: 22px; }
+.ticket .field-value { font-size: 26px; }
 .ticket .fields { border-top-color: rgba(255, 255, 255, .2); }
 .ticket .field-value.bos { color: #9AA6CC; text-shadow: none; }
 
