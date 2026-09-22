@@ -3,26 +3,26 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
-<meta name="theme-color" content="#0A1A3C">
+<meta name="theme-color" content="#2E4C8A">
 <title>PC Bilgileri</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@500;600&family=Manrope:wght@500;600;700;800&display=swap" rel="stylesheet">
 <style>
 :root {
-  --bg: #0A1A3C;
-  --bg-deep: #071229;
-  --surface: #0F2350;
-  --surface-2: #142B5E;
-  --line: #24417F;
-  --line-soft: #1B3468;
+  --bg: #2E4C8A;
+  --bg-deep: #1C3364;
+  --surface: #1E3B72;
+  --surface-2: #274885;
+  --line: #4468AA;
+  --line-soft: #35548F;
   --text: #F4F6FC;
-  --muted: #9FB0DA;
-  --faint: #718AC0;
+  --muted: #C9D5F2;
+  --faint: #9AAEDD;
   --accent: #F5B400;
   --accent-soft: #FFD84D;
-  --neon: #4FE3FF;
-  --neon-soft: #9DF3FF;
+  --splash-1: #FFC72C;
+  --splash-2: #6E93F5;
   --ok: #3DDC97;
   --warn: #FFB84D;
   --err: #FF7A88;
@@ -40,10 +40,9 @@ body {
   font-family: var(--ui);
   color: var(--text);
   background:
-    radial-gradient(60rem 40rem at 8% -12%, rgba(245, 180, 0, .22), transparent 60%),
-    radial-gradient(50rem 36rem at 112% 112%, rgba(60, 110, 220, .28), transparent 55%),
-    radial-gradient(46rem 34rem at 50% 50%, rgba(30, 58, 127, .35), transparent 65%),
-    var(--bg);
+    radial-gradient(65rem 44rem at 10% -10%, rgba(255, 199, 44, .45), transparent 62%),
+    radial-gradient(55rem 40rem at 105% 108%, rgba(110, 147, 245, .5), transparent 58%),
+    linear-gradient(160deg, #3A5CA0, #24417F 55%, #1C3364);
   background-attachment: fixed;
   display: flex;
   align-items: center;
@@ -102,7 +101,7 @@ button { font-family: inherit; }
 .btn-primary {
   color: var(--bg-deep);
   background: linear-gradient(135deg, var(--accent), var(--accent-soft));
-  box-shadow: 0 12px 26px -12px rgba(245, 180, 0, .55), 0 0 22px -4px rgba(79, 227, 255, .4), inset 0 1px 0 rgba(255, 255, 255, .22);
+  box-shadow: 0 12px 26px -12px rgba(245, 180, 0, .55), inset 0 1px 0 rgba(255, 255, 255, .22);
 }
 .btn-primary:hover { filter: brightness(1.1); }
 
@@ -323,22 +322,19 @@ body.kullanici .sahne { display: block; }
   color: var(--accent-soft);
   background: radial-gradient(circle at 35% 28%, rgba(255, 255, 255, .16), rgba(245, 180, 0, .14));
   border: 1.5px solid var(--accent);
-  box-shadow:
-    0 0 0 1px rgba(245, 180, 0, .25),
-    0 0 22px 2px rgba(245, 180, 0, .55),
-    0 0 42px 8px rgba(79, 227, 255, .3);
+  box-shadow: 0 10px 22px -8px rgba(245, 180, 0, .55);
 }
-.login-ikon svg { width: 28px; height: 28px; filter: drop-shadow(0 0 6px rgba(245, 180, 0, .7)); }
-.login h1 { font-size: 24px; font-weight: 800; letter-spacing: -.02em; text-shadow: 0 0 16px rgba(245, 180, 0, .4); }
+.login-ikon svg { width: 28px; height: 28px; }
+.login h1 { font-size: 24px; font-weight: 800; letter-spacing: -.02em; }
 .login .alt { margin: 8px 0 22px; font-size: 15px; color: var(--muted); }
 .login .input {
   text-align: center; font-size: 20px; letter-spacing: .35em; font-weight: 800;
-  border-color: rgba(79, 227, 255, .45);
-  box-shadow: inset 0 0 0 1px rgba(79, 227, 255, .12), 0 0 20px -4px rgba(79, 227, 255, .55);
+  border-color: rgba(255, 199, 44, .5);
+  box-shadow: inset 0 0 0 1px rgba(255, 199, 44, .14);
 }
 .login .input:focus {
-  border-color: var(--neon);
-  box-shadow: 0 0 0 4px rgba(79, 227, 255, .22), 0 0 26px 2px rgba(79, 227, 255, .5);
+  border-color: var(--accent);
+  box-shadow: 0 0 0 4px rgba(245, 180, 0, .22);
 }
 .login .btn { margin-top: 14px; }
 
@@ -387,7 +383,7 @@ body.kullanici .sahne { display: block; }
   cursor: pointer;
   color: var(--text);
   background:
-    linear-gradient(150deg, rgba(255, 255, 255, .20), rgba(255, 255, 255, .02) 42%, rgba(79, 227, 255, .07)),
+    linear-gradient(150deg, rgba(255, 255, 255, .20), rgba(255, 255, 255, .02) 42%, rgba(110, 147, 245, .08)),
     rgba(18, 30, 66, .58);
   -webkit-backdrop-filter: blur(18px) saturate(180%);
           backdrop-filter: blur(18px) saturate(180%);
@@ -397,34 +393,47 @@ body.kullanici .sahne { display: block; }
     inset 0 -14px 22px -14px rgba(0, 0, 0, .6),
     0 4px 0 rgba(245, 180, 0, .22),
     0 12px 0 rgba(10, 20, 55, .3),
-    0 26px 36px -18px rgba(2, 4, 20, .95),
-    0 0 20px -4px rgba(79, 227, 255, .35);
+    0 26px 36px -18px rgba(2, 4, 20, .95);
   transform-style: preserve-3d;
   will-change: transform;
+  overflow: hidden;
   transition: transform .12s ease-out, border-color .2s ease, box-shadow .2s ease;
+}
+/* Splash lekesi: kutunun arkasında dağınık boya sıçraması */
+.kutu::before {
+  content: "";
+  position: absolute;
+  inset: -30%;
+  z-index: 0;
+  background:
+    radial-gradient(circle at 22% 20%, rgba(255, 199, 44, .55), transparent 40%),
+    radial-gradient(circle at 78% 78%, rgba(110, 147, 245, .5), transparent 42%),
+    radial-gradient(circle at 75% 15%, rgba(255, 232, 163, .35), transparent 34%);
+  filter: blur(2px);
+  opacity: .85;
+  pointer-events: none;
 }
 .kutu::after {
   content: "";
   position: absolute;
-  left: 16%; right: 16%; top: -1.5px; height: 3px;
+  left: 18%; right: 18%; top: 0; height: 3px;
   border-radius: 3px;
-  background: linear-gradient(90deg, transparent, var(--accent) 35%, var(--neon) 65%, transparent);
-  box-shadow: 0 0 8px 1px rgba(245, 180, 0, .85), 0 0 14px 3px rgba(79, 227, 255, .55);
+  background: linear-gradient(90deg, transparent, var(--accent), transparent);
 }
+.kutu > * { position: relative; z-index: 1; }
 .kutu:hover {
-  border-color: rgba(79, 227, 255, .55);
+  border-color: rgba(255, 199, 44, .5);
   box-shadow:
     inset 0 2px 0 rgba(255, 255, 255, .35),
     inset 0 -14px 22px -14px rgba(0, 0, 0, .55),
     0 4px 0 rgba(245, 180, 0, .3),
     0 14px 0 rgba(10, 20, 55, .3),
-    0 26px 36px -16px rgba(2, 4, 20, .95),
-    0 0 26px -2px rgba(79, 227, 255, .6);
+    0 26px 36px -16px rgba(2, 4, 20, .95);
 }
 .kutu:active { transform: scale(.96) !important; }
 .kutu-icon { width: 32px; height: 32px; color: var(--accent); flex: none; }
-.kutu-icon svg { width: 100%; height: 100%; filter: drop-shadow(0 0 7px rgba(245, 180, 0, .7)) drop-shadow(0 0 12px rgba(79, 227, 255, .35)); }
-.kutu-num { font-size: 21px; font-weight: 800; line-height: 1; letter-spacing: -.02em; color: var(--neon-soft); text-shadow: 0 0 10px rgba(79, 227, 255, .6); }
+.kutu-icon svg { width: 100%; height: 100%; }
+.kutu-num { font-size: 21px; font-weight: 800; line-height: 1; letter-spacing: -.02em; color: #FFF3C4; }
 .kutu-pc {
   max-width: 100%;
   font-size: 12px;
