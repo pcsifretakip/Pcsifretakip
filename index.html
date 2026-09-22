@@ -594,9 +594,11 @@ function kullaniciEkrani() {
     const pc = data.pcs.find(p => p.id === pcId);
     if (!pc) { hataGoster("PC bulunamadı", "Bu numaraya ait kayıt yok."); return; }
 
-    const ad = pc.pcAdi || "PC " + pc.id;
+    const ad = pc.bilgisayarAdi || "PC " + pc.id;
     const alanlar = [
-      ["Kullanıcı adı", pc.kullaniciAdi],
+      ["Adı", pc.adi],
+      ["Soyadı", pc.soyadi],
+      ["User No", pc.userNo],
       ["Şifre", pc.sifre],
       ["Bit Broker", pc.bitBroker]
     ];
@@ -703,16 +705,16 @@ function gridCiz() {
   const grid = document.getElementById("grid");
   grid.innerHTML = "";
   veri.pcs.forEach(pc => {
-    const tam = !!(pc.kullaniciAdi && pc.sifre && pc.bitBroker);
+    const tam = !!(pc.adi && pc.soyadi && pc.userNo && pc.sifre && pc.bilgisayarAdi && pc.bitBroker);
     const k = document.createElement("button");
     k.type = "button";
     k.className = "kutu";
-    k.setAttribute("aria-label", (pc.pcAdi || "PC " + pc.id) + " düzenle");
+    k.setAttribute("aria-label", (pc.bilgisayarAdi || "PC " + pc.id) + " düzenle");
     k.innerHTML =
       '<span class="kutu-nokta' + (tam ? ' tam' : '') + '"></span>' +
       '<span class="kutu-icon">' + ikon("laptop") + '</span>' +
       '<span class="kutu-num">' + esc(pc.id) + '</span>' +
-      '<span class="kutu-pc">' + esc(pc.pcAdi || "PC " + pc.id) + '</span>';
+      '<span class="kutu-pc">' + esc(pc.bilgisayarAdi || "PC " + pc.id) + '</span>';
     k.onclick = () => formAc(pc.id);
     kutuTiltKur(k);
     grid.appendChild(k);
@@ -747,12 +749,16 @@ function formAc(id) {
         '<div><h1>PC ' + esc(aktifPc.id) + '</h1><p>Bilgileri düzenle</p></div>' +
       '</div>' +
       '<div class="token-kap" id="tokenKap"></div>' +
-      '<div class="form-alan"><label for="f_pcAdi">Bilgisayar adı</label>' +
-        '<input class="input" id="f_pcAdi" value="' + esc(aktifPc.pcAdi) + '" autocomplete="off" /></div>' +
-      '<div class="form-alan"><label for="f_kullaniciAdi">Kullanıcı adı</label>' +
-        '<input class="input mono" id="f_kullaniciAdi" value="' + esc(aktifPc.kullaniciAdi) + '" autocomplete="off" autocapitalize="off" /></div>' +
+      '<div class="form-alan"><label for="f_adi">Adı</label>' +
+        '<input class="input" id="f_adi" value="' + esc(aktifPc.adi) + '" autocomplete="off" /></div>' +
+      '<div class="form-alan"><label for="f_soyadi">Soyadı</label>' +
+        '<input class="input" id="f_soyadi" value="' + esc(aktifPc.soyadi) + '" autocomplete="off" /></div>' +
+      '<div class="form-alan"><label for="f_userNo">User No</label>' +
+        '<input class="input mono" id="f_userNo" value="' + esc(aktifPc.userNo) + '" autocomplete="off" autocapitalize="off" /></div>' +
       '<div class="form-alan"><label for="f_sifre">Şifre</label>' +
         '<input class="input mono" id="f_sifre" value="' + esc(aktifPc.sifre) + '" autocomplete="off" autocapitalize="off" /></div>' +
+      '<div class="form-alan"><label for="f_bilgisayarAdi">Bilgisayar adı</label>' +
+        '<input class="input" id="f_bilgisayarAdi" value="' + esc(aktifPc.bilgisayarAdi) + '" autocomplete="off" /></div>' +
       '<div class="form-alan"><label for="f_bitBroker">Bit Broker</label>' +
         '<input class="input mono" id="f_bitBroker" value="' + esc(aktifPc.bitBroker) + '" autocomplete="off" autocapitalize="off" /></div>' +
       '<div class="durum" id="durum"></div>' +
@@ -798,9 +804,11 @@ function kaydet() {
   const token = localStorage.getItem(TOKEN_KEY);
   if (!token) { bildirim("Önce GitHub token'ını gir.", "hata"); return; }
 
-  aktifPc.pcAdi = document.getElementById("f_pcAdi").value;
-  aktifPc.kullaniciAdi = document.getElementById("f_kullaniciAdi").value;
+  aktifPc.adi = document.getElementById("f_adi").value;
+  aktifPc.soyadi = document.getElementById("f_soyadi").value;
+  aktifPc.userNo = document.getElementById("f_userNo").value;
   aktifPc.sifre = document.getElementById("f_sifre").value;
+  aktifPc.bilgisayarAdi = document.getElementById("f_bilgisayarAdi").value;
   aktifPc.bitBroker = document.getElementById("f_bitBroker").value;
 
   const url = "https://api.github.com/repos/" + REPO + "/contents/" + DOSYA;

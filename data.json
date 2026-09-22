@@ -1,67 +1,13 @@
 {
   "pcs": [
-    {
-      "id": 1,
-      "pcAdi": "PC1",
-      "kullaniciAdi": "Aa658383",
-      "sifre": "sakarya12344567890123",
-      "bitBroker": "111223344"
-    },
-    {
-      "id": 2,
-      "pcAdi": "pc2",
-      "kullaniciAdi": "djjddjdjjd",
-      "sifre": "xndnjdjddj",
-      "bitBroker": "xndjdjdd"
-    },
-    {
-      "id": 3,
-      "pcAdi": "",
-      "kullaniciAdi": "",
-      "sifre": "",
-      "bitBroker": ""
-    },
-    {
-      "id": 4,
-      "pcAdi": "",
-      "kullaniciAdi": "",
-      "sifre": "",
-      "bitBroker": ""
-    },
-    {
-      "id": 5,
-      "pcAdi": "",
-      "kullaniciAdi": "",
-      "sifre": "",
-      "bitBroker": ""
-    },
-    {
-      "id": 6,
-      "pcAdi": "",
-      "kullaniciAdi": "",
-      "sifre": "",
-      "bitBroker": ""
-    },
-    {
-      "id": 7,
-      "pcAdi": "",
-      "kullaniciAdi": "",
-      "sifre": "",
-      "bitBroker": ""
-    },
-    {
-      "id": 8,
-      "pcAdi": "",
-      "kullaniciAdi": "",
-      "sifre": "",
-      "bitBroker": ""
-    },
-    {
-      "id": 9,
-      "pcAdi": "",
-      "kullaniciAdi": "",
-      "sifre": "",
-      "bitBroker": ""
-    }
+    { "id": 1, "adi": "", "soyadi": "", "userNo": "", "sifre": "", "bilgisayarAdi": "", "bitBroker": "" },
+    { "id": 2, "adi": "", "soyadi": "", "userNo": "", "sifre": "", "bilgisayarAdi": "", "bitBroker": "" },
+    { "id": 3, "adi": "", "soyadi": "", "userNo": "", "sifre": "", "bilgisayarAdi": "", "bitBroker": "" },
+    { "id": 4, "adi": "", "soyadi": "", "userNo": "", "sifre": "", "bilgisayarAdi": "", "bitBroker": "" },
+    { "id": 5, "adi": "", "soyadi": "", "userNo": "", "sifre": "", "bilgisayarAdi": "", "bitBroker": "" },
+    { "id": 6, "adi": "", "soyadi": "", "userNo": "", "sifre": "", "bilgisayarAdi": "", "bitBroker": "" },
+    { "id": 7, "adi": "", "soyadi": "", "userNo": "", "sifre": "", "bilgisayarAdi": "", "bitBroker": "" },
+    { "id": 8, "adi": "", "soyadi": "", "userNo": "", "sifre": "", "bilgisayarAdi": "", "bitBroker": "" },
+    { "id": 9, "adi": "", "soyadi": "", "userNo": "", "sifre": "", "bilgisayarAdi": "", "bitBroker": "" }
   ]
 }
