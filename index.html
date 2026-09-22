@@ -32,11 +32,13 @@
 
 * { box-sizing: border-box; margin: 0; padding: 0; -webkit-tap-highlight-color: transparent; }
 
-html { color-scheme: dark; }
+html { color-scheme: dark; overflow-x: hidden; width: 100%; }
 
 body {
   min-height: 100vh;
   min-height: 100dvh;
+  overflow-x: hidden;
+  width: 100%;
   font-family: var(--ui);
   color: var(--text);
   background:
@@ -471,7 +473,7 @@ body.kullanici .sahne { display: block; }
 
 .kul-blok { margin-top: 4px; }
 .kul-blok h2 { font-size: 14px; font-weight: 700; color: var(--muted); margin-bottom: 10px; }
-.kul-satir { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 6px; margin-bottom: 8px; }
+.kul-satir { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1fr) minmax(0, 1fr); gap: 6px; margin-bottom: 8px; min-width: 0; }
 .kul-satir input {
   min-height: 44px;
   padding: 0 10px;
@@ -485,7 +487,7 @@ body.kullanici .sahne { display: block; }
 }
 .kul-satir input::placeholder { color: var(--faint); font-weight: 500; }
 .kul-satir input:focus { outline: none; border-color: var(--accent); box-shadow: 0 0 0 3px rgba(245, 180, 0, .22); }
-.kul-basliklar { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 6px; margin-bottom: 6px; }
+.kul-basliklar { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1fr) minmax(0, 1fr); gap: 6px; margin-bottom: 6px; min-width: 0; }
 .kul-basliklar span { font-size: 11px; font-weight: 700; color: var(--faint); text-transform: uppercase; letter-spacing: .04em; padding: 0 2px; }
 
 .kul-liste { margin-top: 24px; padding-top: 20px; border-top: 1px dashed var(--line); }
